@@ -4,11 +4,11 @@
         <div class="flex-apart">
             <div class="flex-center">
                 <span class="material-icons-round" :class="selected ? 'text' : 'color-green'" style="margin-right:5px">face</span>
-                <span class="f-medium" :class="selected ? 'text' : 'color-green'">2:1 Class</span>
+                <span class="f-small" :class="selected ? 'text' : 'color-green'">{{ this.class.name }}</span>
             </div>
             
             <div :class="selected ? 'bg-white' : 'bg-green'" style="padding:5px 8px;border-radius: 8px;">
-                <span class="f-small" :class="!selected ? 'text' : 'color-green'">{{ selected ? 'Until 5PM' : '4-5PM' }}</span>
+                <span class="f-small" :class="!selected ? 'text' : 'color-green'">{{ selected ? 'Until ' + untilTime : timeRange }}</span>
             </div>
         </div>
     </div>
@@ -19,11 +19,11 @@
 export default {
     name: 'ClassNode',
     props: {
-        class: Object
+        classdata: Object
     },
     data() {
         return {
-            class: this.class,
+            class: this.classdata,
             selected: false,
             closing: false
         }
@@ -34,6 +34,20 @@ export default {
     methods: {
         close(){
             this.closing = true
+        }
+    },
+    computed: {
+        untilTime(){
+            var date = new Date(this.class.end_at);
+            var localeHour = date.toLocaleString('en-US', { hour: 'numeric', hour12: true });
+            return localeHour.split(" ")[0] + localeHour.split(" ")[1];
+        },
+        timeRange(){
+            var start = new Date(this.class.start_at);
+            var end = new Date(this.class.end_at);
+            var localeStart = start.toLocaleString('en-US', { hour: 'numeric', hour12: true });
+            var localeEnd = end.toLocaleString('en-US', { hour: 'numeric', hour12: true });
+            return localeStart.split(" ")[0] + (localeStart.split(" ")[1] != localeEnd.split(" ")[1] ? localeStart.split(" ")[1] : "") + "-" + localeEnd.split(" ")[0] + localeEnd.split(" ")[1];
         }
     }
 }

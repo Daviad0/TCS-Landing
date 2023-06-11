@@ -66,8 +66,8 @@
   </div>
 
   <div class="main flex-center" style="width:100%;margin:0px;padding:0px">
-    <div style="width:90%">
-      <CoachNode v-for="staff in this.staff" :key="staff.id" class="flex-center" style="margin:10px" :coach="staff"/>
+    <div style="width:90%;max-height:80vh;overflow-y:scroll">
+      <CoachNode v-for="staff in this.staff.sort((a,b) => a.localeCompare(b))" :key="staff.id" class="flex-center" style="margin:10px" :coach="staff"/>
     </div>
     
   </div>
@@ -75,6 +75,7 @@
 
 <script>
   var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   var phaseTimes = [6000, 10000, 8000, 8000, 5000];
   var welcomes = ["var greeting = 'Hello'", "Welcome();", "<p>Happy to see you!</p>", "console.log('Welcome!')", "01101000 01101001", "char[] greeting = {'H', 'e', 'l', 'l', 'o'};"]
   var quotes = [
@@ -107,7 +108,6 @@
         sp: {
           expanded: false
         },
-        showItems: {},
         actualClasses: {},
         students: [],
         staff: []
@@ -118,7 +118,7 @@
 
       var token = this.$cookies.get('token')
       if(token == undefined) {
-        window.location = `${this.$root.path}/oauth/authorize?client_id=${process.env.VUE_APP_CLIENT_ID}&response_type=code&redirect_uri=http://localhost:5173/auth`
+        window.location = `${this.$root.path}/oauth/authorize?client_id=${"H4DMGD1xMHHfRyUoz9mC7zH7ZT1Hvda7GUT0rgGU"}&response_type=code&redirect_uri=http://localhost:5173/auth`
       }
 
       setInterval(() => {
@@ -126,7 +126,7 @@
         this.timeStrings[1] = new Date().toLocaleTimeString().split(' ')[1]
         this.loaded.time = true
         this.dateStrings[0] = days[new Date().getDay()]
-        this.dateStrings[1] = new Date().toLocaleDateString()
+        this.dateStrings[1] = months[new Date().getMonth()] + ' ' + new Date().getDate() + ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'][new Date().getDate() % 10] + ', ' + new Date().getFullYear()
       }, 200)
 
       setInterval(() => {
@@ -156,6 +156,7 @@
 
         var startDate = new Date()
         startDate.setMinutes(0);
+        startDate.setHours(0);
         var endDate = new Date()
         endDate.setHours(23);
         endDate.setMinutes(59);
@@ -171,14 +172,12 @@
               if(this.staff.find(s => s.id == sM.id) == undefined) {
                 this.staff.push(sM)
                 this.actualClasses[sM.id] = []
-                this.showItems[sM.id] = []
               }
 
 
               
 
               this.actualClasses[sM.id].push(eO)
-              this.showItems[sM.id].push(eO)
             });
 
             
@@ -186,6 +185,7 @@
 
 
           })
+          console.log(this.staff)
         }).catch((err) => {
           console.log(err)
         });

@@ -19,7 +19,7 @@ export default {
 
         var code = this.$route.query.code
         
-        this.axios.post(`${this.$root.path}/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${this.$parent.redirect}&client_id=H4DMGD1xMHHfRyUoz9mC7zH7ZT1Hvda7GUT0rgGU&client_secret=QOUWOTO3ifRrwJ9H8SyhuJMyWmUjRlBemgyRKvO9`, {}, {
+        this.axios.post(`${this.$root.path}/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${this.$root.redirect}&client_id=H4DMGD1xMHHfRyUoz9mC7zH7ZT1Hvda7GUT0rgGU&client_secret=QOUWOTO3ifRrwJ9H8SyhuJMyWmUjRlBemgyRKvO9`, {}, {
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
