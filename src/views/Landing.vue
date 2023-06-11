@@ -44,19 +44,19 @@
 
   <div class="side-panel" style="margin-right:15px">
     <div v-if="sp.expanded">
-      <div class="container bg-dim" style="border-radius:40px;margin:5px 0px">
+      <div class="container bg-dim shadow" style="border-radius:40px;margin:5px 0px">
         <span class="material-icons-round text" style="font-size:25px;margin:5px">
           person_remove
         </span>
       </div>
-      <div class="container bg-dim" style="border-radius:40px;margin:5px 0px">
+      <div class="container bg-dim shadow" style="border-radius:40px;margin:5px 0px">
         <span class="material-icons-round text" style="font-size:25px;margin:5px">
           settings
         </span>
       </div>
     </div>
     <div v-if="!sp.expanded">
-      <div class="container bg-dim" style="border-radius:40px;margin:5px 0px">
+      <div class="container bg-dim shadow" style="border-radius:40px;margin:5px 0px">
         <span class="material-icons-round text" style="font-size:25px;margin:5px">
           menu
         </span>
@@ -67,7 +67,7 @@
 
   <div class="main flex-center" style="width:100%;margin:0px;padding:0px">
     <div style="width:90%">
-      <CoachNode class="flex-center" style="margin:10px"/>
+      <CoachNode v-for="staff in this.staff" :key="staff.id" class="flex-center" style="margin:10px" :coach="staff"/>
     </div>
     
   </div>
@@ -106,10 +106,21 @@
         welcomes: welcomes,
         sp: {
           expanded: false
-        }
+        },
+        showItems: {},
+        actualClasses: {},
+        students: [],
+        staff: []
       }
     },
     mounted() {
+
+
+      var token = this.$cookies.get('token')
+      if(token == undefined) {
+        window.location = `${this.$root.path}/oauth/authorize?client_id=${process.env.VUE_APP_CLIENT_ID}&response_type=code&redirect_uri=http://localhost:5173/auth`
+      }
+
       setInterval(() => {
         this.timeStrings[0] = new Date().toLocaleTimeString().split(' ')[0]
         this.timeStrings[1] = new Date().toLocaleTimeString().split(' ')[1]
@@ -134,10 +145,50 @@
           
         }, 1100)
       }, 100)
+
+      this.refreshAPI()
     },
     methods: {
       randomSelector(){
         this.randomSelectorNum = Math.floor(Math.random() * 1000)
+      },
+      refreshAPI(){
+
+        var startDate = new Date()
+        startDate.setMinutes(0);
+        var endDate = new Date()
+        endDate.setHours(23);
+        endDate.setMinutes(59);
+
+        this.axios.get(`${this.$root.pathLocation}/api/v2/desk/event_occurrences?from=${startDate.toString()}&to=${endDate.toString()}`, {headers: {'Authorization': `Bearer ${this.$cookies.get('token')}`}}).then((res) => {
+          res.data.event_occurrences.forEach(eO => {
+
+            // cache them
+            eO.people.forEach(p => {
+              if(this.students.find(s => s.id == p.id) == undefined) this.students.push(p)
+            });
+            eO.staff_members.forEach(sM => {
+              if(this.staff.find(s => s.id == sM.id) == undefined) {
+                this.staff.push(sM)
+                this.actualClasses[sM.id] = []
+                this.showItems[sM.id] = []
+              }
+
+
+              
+
+              this.actualClasses[sM.id].push(eO)
+              this.showItems[sM.id].push(eO)
+            });
+
+            
+
+
+
+          })
+        }).catch((err) => {
+          console.log(err)
+        });
       }
     }
   }
