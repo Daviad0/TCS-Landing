@@ -309,6 +309,12 @@
 
         var visitToNote = this.visits[(overrideeOID == undefined ? eO.id : overrideeOID) + "-" + s.id];
         if(visitToNote == undefined) return;
+
+
+        if(status == "complete" && visitToNote.status == "noshow") status = "reset";
+        if(status == "noshow" && visitToNote.status == "complete") status = "reset";
+
+
         this.axios.put(`${this.$root.pathLocation}/api/v2/desk/visits/${visitToNote.id}`, {visit: {state_event: status}}, {headers: {'Authorization': `Bearer ${this.$cookies.get('token')}`}}).then((res) => {
           
         });
