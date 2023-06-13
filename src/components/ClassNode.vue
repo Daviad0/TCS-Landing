@@ -97,7 +97,7 @@ export default {
             this.icon = "star"
         }
 
-        this.checkTimer = setTimeout(() => {
+        this.checkTimer = setInterval(() => {
             var now = new Date();
             // check if started
             if(now.getTime() > new Date(this.class.start_at).getTime()){
