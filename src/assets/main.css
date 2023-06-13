@@ -14,8 +14,14 @@ Font Configurations...
 .color-green{
   color: #014600;
 }
+.color-blue{
+  color: #0c0263;
+}
 .color-gray{
   color: #242424;
+}
+.color-yellow{
+  color: #595900;
 }
 
 .f-bold{
@@ -100,11 +106,33 @@ span{
 .bg-white{
   background-color: #fff;
 }
-.bg-light{
+.bg-lightgreen{
   background-color: rgb(111, 255, 108);
+}
+.bg-lightblue{
+  background-color: rgb(108, 147, 255);
+}
+.bg-lightyellow{
+  background-color: rgb(255, 255, 137);
+}
+
+.bg-verylightblue{
+  background-color: rgb(108, 147, 255, 0.5);
+}
+.bg-verylightgreen{
+  background-color: rgb(111, 255, 108, 0.5);
+}
+.bg-verylightyellow{
+  background-color: rgb(255, 255, 137, 0.5);
+}
+.bg-verylightgray{
+  background-color: rgba(199, 199, 199, 0.5);
 }
 .bg-green{
   background-color: #014600;
+}
+.bg-blue{
+  background-color: #0c0263;
 }
 .bg-lightgray{
   background-color: #c7c7c7;
@@ -112,13 +140,40 @@ span{
 .bg-gray{
   background-color: #242424;
 }
+.bg-yellow{
+  background-color: #595900;
+}
+.bg-greenlight{
+  background-color: rgba(0,228,4,1);
+}
 
 
 .border-green{
   border: 2px solid #014600;
 }
+.border-lightgreen{
+  border: 2px solid rgb(111, 255, 108);
+}
+.border-blue{
+  border: 2px solid #0c0263;
+}
+.border-lightblue{
+  border: 2px solid rgb(108, 147, 255);
+}
 .border-gray{
   border: 2px solid #242424;
+}
+.border-lightgray{
+  border: 2px solid #c7c7c7;
+}
+.border-yellow{
+  border: 2px solid #595900;
+}
+.border-lightyellow{
+  border: 2px solid rgb(255, 255, 137);
+}
+.border-transparent{
+  border: 2px solid transparent;
 }
 
 
@@ -137,8 +192,17 @@ span{
 .shadow{
   box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
 }
+.shadow-less{
+  box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.75);
+}
 .greenglow{
   box-shadow: 0px 0px 15px 0px rgba(0,228,4,.8);
+}
+.blueglow{
+  box-shadow: 0px 0px 15px 0px rgba(67, 46, 255, 0.8);
+}
+.yellowglow{
+  box-shadow: 0px 0px 15px 0px rgba(255, 255, 67, 0.8);
 }
 
 .fade-in{

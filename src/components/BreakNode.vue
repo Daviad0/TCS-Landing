@@ -24,7 +24,8 @@
 export default {
     name: 'BreakNode',
     props: {
-        class: Object
+        class: Object,
+        breakdata: Object,
     },
     data() {
         return {
@@ -36,15 +37,22 @@ export default {
         }
     },
     mounted() {
-        
+        setInterval(() => {
+            if((new Date()).getTime() > (new Date(this.breakdata.start_at)).getTime()){
+
+                this.breakEndTime = new Date(this.breakdata.end_at);
+
+                this.triggerBreakStart();
+
+            }
+        }, 500)
     },
     methods: {
         close(){
             this.closing = true
         },
         triggerBreakStart(){
-            this.breakEndTime = new Date()
-            this.breakEndTime.setSeconds(this.breakEndTime.getSeconds() + 15)
+            
 
             setInterval(() => {
                 if(this.breakEndTime < new Date()){

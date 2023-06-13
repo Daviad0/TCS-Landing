@@ -1,20 +1,68 @@
 <template>
 
-    <div class="container border-green" :class="selected ? 'bg-green greenglow' : 'bg-light'" :style="closing ? 'width:0px;opacity:0%;padding:0px;margin:0px' : 'width:250px;opacity:100%;margin:5px'" style="border-radius:16px;min-height:60px;overflow-x:hidden" @click="close()">
-        <div class="flex-apart">
-            <div class="flex-center">
-                <span class="material-icons-round" :class="selected ? 'text' : 'color-green'" style="margin-right:5px">face</span>
-                <span class="f-small" :class="selected ? 'text' : 'color-green'">{{ this.class.name }}</span>
+    <div class="container" :class="selected ? `bg-light${color} ${color}glow border-${color}` : `bg-verylight${color} border-light${color}`" :style="closing ? 'width:0px;opacity:0%;padding:0px;margin:0px' : `width:${width};opacity:100%;margin:5px`" style="border-radius:16px;overflow-x:hidden" @click="selected = !selected">
+        <div :style="`width:${width}`">
+            <div class="flex-apart">
+                <div class="flex-center">
+                    <span class="material-icons-round" :class="selected ? `color-${color}` : `color-${color}`" style="margin-right:5px">{{ icon}}</span>
+                    <span class="f-small" :class="selected ? `color-${color}` : `color-${color}`">{{ getFirstThreeWords(this.class.name) }}</span>
+                </div>
+                
+                <div :class="!selected ? 'bg-white' : `bg-${color}`" style="padding:5px 8px;border-radius: 8px;">
+                    <span class="f-small" :class="selected ? 'text' : `color-${color}`">{{ selected ? 'Until ' + untilTime : timeRange }}</span>
+                </div>
             </div>
-            
-            <div :class="selected ? 'bg-white' : 'bg-green'" style="padding:5px 8px;border-radius: 8px;">
-                <span class="f-small" :class="!selected ? 'text' : 'color-green'">{{ selected ? 'Until ' + untilTime : timeRange }}</span>
+            <div class="flex-center" style="flex-wrap:wrap;margin-top:5px" v-if="this.class.people.length > 0">
+                <div class="bg-white shadow-less" v-for="person in this.class.people" :key="person.id" style="padding:4px 8px;border-radius: 8px;margin:4px">
+                    <span class="f-small" :class="`color-${color}`">{{ person.name }}</span>
+                </div>
             </div>
         </div>
+        
     </div>
 </template>
 
 <script>
+
+
+var lookConfigs = [
+    {
+        search: "trial",
+        icon: "warning",
+        color: "yellow"
+    },
+    {
+        search: "internal",
+        icon: "forum",
+        color: "gray"
+    },
+    {
+        search: "make",
+        icon: "history",
+        color: "green"
+    },
+    
+    {
+        search: "camp",
+        icon: "school",
+        color: "blue"
+    },
+    {
+        search: "virtual",
+        icon: "computer",
+        color: "green"
+    },
+    {
+        search: "2:1",
+        icon: "group",
+        color: "green"
+    },
+    {
+        search: "1:1",
+        icon: "face",
+        color: "green"
+    },
+]
 
 export default {
     name: 'ClassNode',
@@ -25,15 +73,59 @@ export default {
         return {
             class: this.classdata,
             selected: false,
-            closing: false
+            closing: false,
+            lookConfigs: lookConfigs,
+            color: "green",
+            icon: "face",
+            width: "260px",
         }
     },
     mounted() {
+
+
         
+
+        let res = this.appropriateLookObject(this.class.name, this.class.people.length);
+        this.color = res.color;
+        this.icon = res.icon;
+
+        if(this.class.people.length > 3){
+            this.width = "400px";
+            this.color = "blue";
+            this.icon = "star"
+        }
+
+        this.checkTimer = setTimeout(() => {
+            var now = new Date();
+            // check if started
+            if(now.getTime() > new Date(this.class.start_at).getTime()){
+                // check if ended
+                this.selected = true;
+            }
+
+            // if(now.getTime() > new Date(this.class.end_at).getTime()){
+            //     // check if ended
+            //     this.closing = true;
+            //     this.checkTimer = null;
+            // }
+        }, 1000)
     },
     methods: {
         close(){
             this.closing = true
+        },
+        getFirstThreeWords(string){
+            return string.split(" ").slice(0, 3).join(" ");
+        },
+        appropriateLookObject(name, students){
+            var config = this.lookConfigs.find(config => name.toLowerCase().includes(config.search));
+            if(config == undefined){
+                config = {
+                    icon: "face",
+                    color: "green"
+                }
+            }
+            return config;
         }
     },
     computed: {
