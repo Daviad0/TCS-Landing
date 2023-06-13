@@ -105,11 +105,11 @@ export default {
                 this.selected = true;
             }
 
-            // if(now.getTime() > new Date(this.class.end_at).getTime()){
-            //     // check if ended
-            //     this.closing = true;
-            //     this.checkTimer = null;
-            // }
+            if(now.getTime() > new Date(this.class.end_at).getTime()){
+                // check if ended
+                this.closing = true;
+                this.checkTimer = null;
+            }
         }, 1000)
     },
     methods: {

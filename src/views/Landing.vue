@@ -45,7 +45,7 @@
   
 
   <div class="main flex-center" style="width:100%;margin:0px;padding:0px;border-radius:16px" :style="screen == 'coaches' ? 'max-height:100vh;overflow-y:hidden;opacity:1' : 'max-height:0vh;overflow-y:hidden;opacity:0'">
-    <div style="width:100%;max-height:80vh;overflow-y:scroll">
+    <div style="width:100%;max-height:80vh;overflow-y:scroll" ref="scroll">
       <CoachNode v-for="staff in this.staff.sort((a,b) => a.name.localeCompare(b.name))" :key="staff.id" class="flex-center" style="margin:20px 10px" :coach="staff"/>
     </div>
     
@@ -185,7 +185,11 @@
         statusCheck: 0,
         cacheClasses: {},
         studentClasses: {},
-        visits: {}
+        visits: {},
+        scroll:{
+          dir: 1,
+          amount: 1000
+        }
       }
     },
     mounted() {
@@ -250,7 +254,17 @@
         this.refreshAPI()
       }, 20000);
 
+
+
       setInterval(() => {
+
+        this.$refs.scroll.scrollBy(0,this.scroll.dir* 1);
+        this.scroll.amount--;
+        if(this.scroll.amount == 0){
+          this.scroll.dir = -this.scroll.dir;
+          this.scroll.amount = 1000;
+        }
+
         if((new Date().getTime() - this.tr.timefrom) < phaseTimes[this.tr.phase]) return;
 
 
