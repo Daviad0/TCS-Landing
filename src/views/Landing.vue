@@ -45,7 +45,7 @@
   
 
   <div class="main flex-center" style="width:100%;margin:0px;padding:0px;border-radius:16px" :style="screen == 'coaches' ? 'max-height:100vh;overflow-y:hidden;opacity:1' : 'max-height:0vh;overflow-y:hidden;opacity:0'">
-    <div style="width:100%;max-height:80vh;overflow-y:scroll" ref="scroll">
+    <div style="width:100%;max-height:80vh;overflow-y:scroll" ref="scroll" class="hidescroll">
       <CoachNode v-for="staff in this.staff.sort((a,b) => a.name.localeCompare(b.name))" :key="staff.id" class="flex-center" style="margin:20px 10px" :coach="staff"/>
     </div>
     
@@ -355,6 +355,10 @@
           res.data.event_occurrences = res.data.event_occurrences.sort((a,b) => new Date(a.start_at) > new Date(b.start_at) ? 1 : -1);
           res.data.event_occurrences.forEach(eO => {
 
+            var plusOneMin = new Date();
+            plusOneMin.setMinutes(plusOneMin.getMinutes() + 1);
+
+            if(new Date(eO.end_at) < plusOneMin) return;
 
             // get each status and SAVE
             this.axios.get(`${this.$root.pathLocation}/api/v2/desk/event_occurrences/${eO.id}/visits`,{headers: {'Authorization': `Bearer ${this.$cookies.get('token')}`}}).then((vRes) => {
