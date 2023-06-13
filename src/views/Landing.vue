@@ -51,7 +51,7 @@
     
   </div>
   <div class="main flex-center" style="width:100%;margin:0px;padding:0px;border-radius:16px" :style="screen == 'absent' ? 'max-height:100vh;overflow-y:hidden;opacity:1' : 'max-height:0vh;overflow-y:hidden;opacity:0'">
-    <div style="width:90%;max-height:80vh;overflow-y:scroll">
+    <div style="width:90%;max-height:80vh;overflow-y:scroll" class="hidescroll">
       <span class="text f-xlarge f-bold" style="margin:5px">Mark Student Absent</span>
       <span class="text f-medium" style="margin:5px">To mark a student as absent for their class periods, select the letter corresponding to your student below...</span>
       <div class="flex-center" style="flex-wrap:wrap;marign-top:40px">
@@ -72,7 +72,7 @@
     
   </div>
   <div class="main flex-center" style="width:100%;margin:0px;padding:0px;border-radius:16px" :style="screen == 'present' ? 'max-height:100vh;overflow-y:hidden;opacity:1' : 'max-height:0vh;overflow-y:hidden;opacity:0'">
-    <div style="width:90%;max-height:80vh;overflow-y:scroll">
+    <div style="width:90%;max-height:80vh;overflow-y:scroll" class="hidescroll">
       <span class="text f-xlarge f-bold" style="margin:5px">Mark Student Preset</span>
       <span class="text f-medium" style="margin:5px">To mark a student as present for their class periods, select the letter corresponding to your student below...</span>
       <div class="flex-center" style="flex-wrap:wrap;marign-top:40px">
