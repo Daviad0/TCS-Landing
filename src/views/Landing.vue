@@ -16,13 +16,16 @@
       schedule
     </span>
   </div>
-  <div class="top-right flex-center bg-dim shadow" style="border-radius: 0px 0px 0px 24px;padding:10px;width:30%;height:100px;max-width:400px;min-width:200px">
+  <div class="top-right flex-center" >
+    <img src="@/assets/circle-logo.png" style="margin:20px;border-radius: 100px;" height="80" class="shadow" />
+  </div>
+  <div class="bottom-right flex-center bg-dim shadow" style="border-radius: 24px 0px 0px 0px;padding:10px;width:50%;height:100px;max-width:500px;min-width:200px">
     <div ref="tr_content" class="fade-in">
       <span class="text f-large" v-if="tr.phase == 0">Welcome to <inline class="f-bold">Plymouth, MI</inline></span>
       <div v-if="tr.phase == 1">
         <span class="text f-medium">Today's Hours:</span>
         <div class="bg-dim" style="padding:8px;border-radius:8px;margin:10px 10px 0px 10px">
-          <span class="text f-small">9:00AM - 3:00PM</span>
+          <span class="text f-small">{{ hours }}</span>
         </div>
         
       </div>
@@ -42,24 +45,39 @@
     </div>
   </div>
 
+  <div class="bottom-left bg-dim flex-center shadow" style="margin:20px;border-radius:16px;width:40%;height:80px;padding:10px" :style="message.show ? 'bottom:0' : 'bottom: -200px'">
+    <div>
+      
+      <span class="f-medium text">{{ message.text }}</span>
+    </div>
+    
+  </div>
+
   
 
   <div class="main flex-center" style="width:100%;margin:0px;padding:0px;border-radius:16px" :style="screen == 'coaches' ? 'max-height:100vh;overflow-y:hidden;opacity:1' : 'max-height:0vh;overflow-y:hidden;opacity:0'">
     <div style="width:100%;max-height:80vh;overflow-y:scroll" ref="scroll" class="hidescroll">
-      <CoachNode v-for="staff in this.staff.sort((a,b) => a.name.localeCompare(b.name))" :key="staff.id" class="flex-center" style="margin:20px 10px" :coach="staff"/>
+      <CoachNode v-for="staff in this.staff.sort((a,b) => a.name.localeCompare(b.name))" :key="staff.id" class="flex-center" :coach="staff"/>
     </div>
     
   </div>
   <div class="main flex-center" style="width:100%;margin:0px;padding:0px;border-radius:16px" :style="screen == 'absent' ? 'max-height:100vh;overflow-y:hidden;opacity:1' : 'max-height:0vh;overflow-y:hidden;opacity:0'">
     <div style="width:90%;max-height:80vh;overflow-y:scroll" class="hidescroll">
-      <span class="text f-xlarge f-bold" style="margin:5px">Mark Student Absent</span>
+      <div class="flex-center">
+        <span class="material-icons-round text" style="font-size:30px;margin:5px">
+          cancel
+        </span>
+        <span class="text f-xlarge f-bold" style="margin:5px;margin-top:20px">Mark Student Absent</span>
+      </div>
       <span class="text f-medium" style="margin:5px">To mark a student as absent for their class periods, select the letter corresponding to your student below...</span>
-      <div class="flex-center" style="flex-wrap:wrap;marign-top:40px">
+      <div class="flex-center" style="flex-wrap:wrap;margin-top:40px">
         <div v-for="student in this.students" :key="student.id">
           <div class="container bg-white shadow" style="border-radius:16px;margin:10px;padding:12px 24px">
             <span class="f-large color-green">{{ student.name }}</span>
             <div class="flex-center" style="flex-wrap:wrap">
-              <div class="bg-green" style="padding:4px 8px;border-radius:8px;margin:4px" v-for="c in getClasses(student)" :key="c.id">
+              <div class="bg-green flex-center" style="padding:4px 8px;border-radius:8px;margin:4px" v-for="c in getClasses(student)" :key="c.id">
+                <span class="material-icons-round" style="font-size:14px;margin-right:5px" :class="`text`" v-if="this.getStatus(student, c) == 'noshow'">cancel</span>
+                <span class="material-icons-round" style="font-size:14px;margin-right:5px" :class="`text`" v-if="this.getStatus(student, c) == 'complete'">check_circle</span>
                 <span class="text f-small">{{ timeRange(c.start_at, c.end_at) }}</span>
               </div>
             </div>
@@ -73,14 +91,22 @@
   </div>
   <div class="main flex-center" style="width:100%;margin:0px;padding:0px;border-radius:16px" :style="screen == 'present' ? 'max-height:100vh;overflow-y:hidden;opacity:1' : 'max-height:0vh;overflow-y:hidden;opacity:0'">
     <div style="width:90%;max-height:80vh;overflow-y:scroll" class="hidescroll">
-      <span class="text f-xlarge f-bold" style="margin:5px">Mark Student Preset</span>
+      <div class="flex-center">
+        <span class="material-icons-round text" style="font-size:30px;margin:5px">
+          check_circle
+        </span>
+        <span class="text f-xlarge f-bold" style="margin:5px;margin-top:20px">Mark Student Present</span>
+      </div>
+      
       <span class="text f-medium" style="margin:5px">To mark a student as present for their class periods, select the letter corresponding to your student below...</span>
-      <div class="flex-center" style="flex-wrap:wrap;marign-top:40px">
+      <div class="flex-center" style="flex-wrap:wrap;margin-top:40px">
         <div v-for="student in this.students" :key="student.id">
           <div class="container bg-white shadow" style="border-radius:16px;margin:10px;padding:12px 24px">
             <span class="f-large color-green">{{ student.name }}</span>
             <div class="flex-center" style="flex-wrap:wrap">
-              <div class="bg-green" style="padding:4px 8px;border-radius:8px;margin:4px" v-for="c in getClasses(student)" :key="c.id">
+              <div class="bg-green flex-center" style="padding:4px 8px;border-radius:8px;margin:4px" v-for="c in getClasses(student)" :key="c.id">
+                <span class="material-icons-round" style="font-size:14px;margin-right:5px" :class="`text`" v-if="this.getStatus(student, c) == 'noshow'">cancel</span>
+                <span class="material-icons-round" style="font-size:14px;margin-right:5px" :class="`text`" v-if="this.getStatus(student, c) == 'complete'">check_circle</span>
                 <span class="text f-small">{{ timeRange(c.start_at, c.end_at) }}</span>
               </div>
             </div>
@@ -141,6 +167,7 @@
 </template>
 
 <script>
+
   var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   var phaseTimes = [6000, 10000, 8000, 8000, 5000];
@@ -189,7 +216,13 @@
         scroll:{
           dir: 1,
           amount: 1000
-        }
+        },
+        message:{
+          text: "",
+          show: false,
+          icon: "",
+        },
+        hours: "-:-- to -:--"
       }
     },
     mounted() {
@@ -213,7 +246,17 @@
             // get index of key in letters
             var index = letters.indexOf(evt.key.toLowerCase())
             if(index < this.students.length){
-              this.markStudentStatus(this.students[index], this.studentClasses[this.students[index].id][0], "noshow");
+
+              var closestClass = this.studentClasses[this.students[index].id][0];
+              for(var i = 1; i < this.studentClasses[this.students[index].id].length; i++){
+                var endDate = new Date(this.studentClasses[this.students[index].id][i].end_at);
+                if((this.$root.now()).getTime() - endDate.getTime() < (this.$root.now()).getTime() - new Date(closestClass.end_at).getTime()){
+                  closestClass = this.studentClasses[this.students[index].id][i];
+                }
+              }
+
+              this.markStudentStatus(this.students[index], closestClass, "noshow", "cancel");
+              this.showMessage(`${this.students[index].name} was marked as absent!`, 4000);
               this.screen = "coaches"
             }
 
@@ -227,7 +270,17 @@
             // get index of key in letters
             var index = letters.indexOf(evt.key.toLowerCase())
             if(index < this.students.length){
-              this.markStudentStatus(this.students[index], this.studentClasses[this.students[index].id][0], "complete");
+
+              var closestClass = this.studentClasses[this.students[index].id][0];
+              for(var i = 1; i < this.studentClasses[this.students[index].id].length; i++){
+                var endDate = new Date(this.studentClasses[this.students[index].id][i].end_at);
+                if((this.$root.now()).getTime() - endDate.getTime() < (this.$root.now()).getTime() - new Date(closestClass.end_at).getTime()){
+                  closestClass = this.studentClasses[this.students[index].id][i];
+                }
+              }
+
+              this.markStudentStatus(this.students[index], closestClass, "complete", "check_circle");
+              this.showMessage(`${this.students[index].name} was marked as present!`, 4000);
               this.screen = "coaches"
             }
 
@@ -243,11 +296,11 @@
       }
 
       setInterval(() => {
-        this.timeStrings[0] = new Date().toLocaleTimeString().split(' ')[0]
-        this.timeStrings[1] = new Date().toLocaleTimeString().split(' ')[1]
+        this.timeStrings[0] = this.$root.now().toLocaleTimeString().split(' ')[0]
+        this.timeStrings[1] = this.$root.now().toLocaleTimeString().split(' ')[1]
         this.loaded.time = true
-        this.dateStrings[0] = days[new Date().getDay()]
-        this.dateStrings[1] = months[new Date().getMonth()] + ' ' + new Date().getDate() + ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'][new Date().getDate() % 10] + ', ' + new Date().getFullYear()
+        this.dateStrings[0] = days[this.$root.now().getDay()]
+        this.dateStrings[1] = months[this.$root.now().getMonth()] + ' ' + this.$root.now().getDate() + (this.$root.now().getDate() >= 10 && this.$root.now().getDate() <= 19 ? 'th' : ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'][this.$root.now().getDate() % 10]) + ', ' + this.$root.now().getFullYear()
       }, 200)
 
       setInterval(() => {
@@ -285,6 +338,17 @@
       
     },
     methods: {
+      showMessage(text, duration, icon){
+        if(this.message.show) return;
+
+        this.message.text = text;
+        this.message.icon = icon;
+        this.message.show = true;
+
+        setTimeout(() => {
+          this.message.show = false;
+        }, duration)
+      },
       randomSelector(){
         this.randomSelectorNum = Math.floor(Math.random() * 1000)
       },
@@ -312,8 +376,13 @@
         var start = new Date(dStart);
         var end = new Date(dEnd);
         var localeStart = start.toLocaleString('en-US', { hour: 'numeric', hour12: true });
+        var localeStartMin = start.toLocaleString('en-US', { minute: 'numeric' });
+        localeStartMin = parseInt(localeStartMin) < 10 ? "0" + localeStartMin : localeStartMin;
+
         var localeEnd = end.toLocaleString('en-US', { hour: 'numeric', hour12: true });
-        return localeStart.split(" ")[0] + (localeStart.split(" ")[1] != localeEnd.split(" ")[1] ? localeStart.split(" ")[1] : "") + "-" + localeEnd.split(" ")[0] + localeEnd.split(" ")[1];
+        var localeEndMin = end.toLocaleString('en-US', { minute: 'numeric' });
+        localeEndMin = parseInt(localeEndMin) < 10 ? "0" + localeEndMin : localeEndMin;
+        return localeStart.split(" ")[0] + (localeStartMin != "00" ? ":" + localeStartMin : "") + (localeStart.split(" ")[1] != localeEnd.split(" ")[1] ? localeStart.split(" ")[1] : "") + "-" + localeEnd.split(" ")[0] + (localeEndMin != "00" ? ":" + localeEndMin : "") + localeEnd.split(" ")[1];
       },
       markStudentStatus(s, eO, status){
         // first have to get visit ids
@@ -338,10 +407,13 @@
       },
       refreshAPI(){
 
-        var startDate = new Date()
+
+        console.log(this.$root.now());
+
+        var startDate = this.$root.now();
         startDate.setMinutes(0);
         startDate.setHours(0);
-        var endDate = new Date()
+        var endDate = this.$root.now();
         endDate.setHours(23);
         endDate.setMinutes(59);
 
@@ -351,15 +423,23 @@
 
         var studentsCheck = [];
 
+        var earliestTime = new Date('3000-01-01T00:00:00.000Z');
+        var latestTime = new Date('1000-01-01T00:00:00.000Z');
+
         this.axios.get(`${this.$root.pathLocation}/api/v2/desk/event_occurrences?from=${startDate.toString()}&to=${endDate.toString()}`, {headers: {'Authorization': `Bearer ${this.$cookies.get('token')}`}}).then((res) => {
           res.data.event_occurrences = res.data.event_occurrences.sort((a,b) => new Date(a.start_at) > new Date(b.start_at) ? 1 : -1);
           res.data.event_occurrences.forEach(eO => {
 
-            var plusOneMin = new Date();
+            var plusOneMin = this.$root.now();
             plusOneMin.setMinutes(plusOneMin.getMinutes() + 1);
 
-            if(new Date(eO.end_at) < plusOneMin) return;
-
+            
+            if(new Date(eO.start_at) < earliestTime){
+              earliestTime = new Date(eO.start_at);
+            }      
+            if(new Date(eO.end_at) > latestTime){
+              latestTime = new Date(eO.end_at);
+            }      
             // get each status and SAVE
             this.axios.get(`${this.$root.pathLocation}/api/v2/desk/event_occurrences/${eO.id}/visits`,{headers: {'Authorization': `Bearer ${this.$cookies.get('token')}`}}).then((vRes) => {
               vRes.data.visits.forEach(v => {
@@ -380,6 +460,10 @@
                 this.studentClasses[p.id].push(eO);
               }
             });
+
+
+            //if(new Date(eO.end_at) < plusOneMin) return;
+
             eO.staff_members.forEach(sM => {
               if(this.staff.find(s => s.id == sM.id) == undefined) {
                 this.staff.push(sM)
@@ -413,6 +497,10 @@
 
           })
           console.log(this.staff)
+
+
+          this.hours = this.timeRange(earliestTime, latestTime);
+
         }).catch((err) => {
           console.log(err)
         });

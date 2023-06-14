@@ -1,10 +1,10 @@
 <template>
-    <div class="flex-center" style="padding:0px;align-items: start;">
-        <div style="width:40%;border-radius: 16px 0px 0px 16px;padding:20px 0px;max-width:400px;min-width:300px" class="bg-white container">
+    <div ref="base" class="flex-center" style="padding:0px;align-items: start" :style="show ? 'margin:20px 0px;max-height:800px;overflow-y:hidden;opacity:1' : 'margin:0px;max-height:0px;overflow-y:hidden;margin-top:-20px;opacity:0'">
+        <div style="width:30%;border-radius: 16px 0px 0px 16px;padding:20px 0px;max-width:400px;min-width:250px" class="bg-white container">
             <span class="text color-green f-xlarge f-bold" style="margin:5px">{{ coach.name }}</span>
             <span class="text color-green f-medium" style="margin:5px">Working until {{ latest }}</span>
         </div>
-        <div style="width:55%;border-radius: 0px 16px 16px 16px;min-height:150px;padding:20px;flex-wrap: wrap;" class="bg-white container flex-center">
+        <div style="width:62%;border-radius: 0px 16px 16px 16px;min-height:150px;padding:20px;flex-wrap: wrap;" class="bg-white container flex-center">
             <div v-for="ts in timeSections">
                 <ClassNode v-if="ts.type == 'class'" :classdata="ts.data"/>
                 <BreakNode v-if="ts.type == 'break'" :breakdata="ts.data"/>
@@ -24,7 +24,8 @@
                 coach: this.coach,
                 timeSections: [],
                 showClasses: [],
-                latest: ""
+                latest: "",
+                show: true,
             }
         },
         mounted() {
@@ -32,6 +33,20 @@
             
         },
         methods: {
+            removeFromTimeSection(eO){
+                this.timeSections = this.timeSections.filter((e) => {
+                    return e.data.id != eO.id;
+                });
+
+                if(this.timeSections.filter(t => t.type == 'class').length == 0){
+                    // collapse coach
+                    this.show = false;
+                    setTimeout(() => {
+                        this.$refs.base.style.display = "none";
+                    }, 1000);
+                    
+                }
+            },
             updateTimeSections(){
                 var latestTime = new Date("1/1/1970");
                 this.timeSections = [];
@@ -70,11 +85,35 @@
                         }
 
                     }
+                    // else{
+                    //     if(this.$root.now() < new Date(c.start_at)){
+                    //         // there is a break
+                    //         this.timeSections.push({
+                    //             type: "break",
+                    //             data: {
+                    //                 start_at: this.$root.now(),
+                    //                 end_at: new Date(c.start_at),
+                    //                 time: new Date(c.start_at).getTime() - this.$root.now().getTime()
+                    //             }
+                    //         });
+                    //     }
+                    // }
+
+                    if(this.$root.now() > new Date(c.end_at)){
+                        continue;
+                    }
 
                     this.timeSections.push({
                         type: "class",
                         data: c
                     });
+                }
+                if(this.timeSections.filter(t => t.type == 'class').length == 0){
+                    // collapse coach
+                    this.show = false;
+                    setTimeout(() => {
+                        this.$refs.base.style.display = "none";
+                    }, 1000);
                 }
             }
         }

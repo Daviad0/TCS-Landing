@@ -76,6 +76,7 @@ html {
   background-repeat: no-repeat;
   background-size: cover;
   transition: background 0s ease;
+  overflow:hidden;
 }
 
 .top-left{
@@ -88,6 +89,18 @@ html {
   position: absolute;
   top:0;
   right:0;
+}
+
+.bottom-right{
+  position: absolute;
+  bottom:0;
+  right:0;
+}
+
+.bottom-left{
+  position: absolute;
+  bottom:0;
+  left:0;
 }
 
 .side-panel{
@@ -175,7 +188,7 @@ span{
   border: 2px solid #242424;
 }
 .border-lightgray{
-  border: 2px solid #c7c7c7;
+  border: 2px solid #a0a0a0;
 }
 .border-yellow{
   border: 2px solid #595900;

@@ -1,12 +1,15 @@
 <template>
 
-    <div class="container bg-lightgray border-gray flex-center" :class="expanded ? 'bg-gray' : 'bg-lightgray'" :style="closing ? 'margin:0px;padding:0px;width:0px;opacity:0%' : (expanded ? 'width:250px;opacity:100%;margin:5px' : 'width:50px;opacity:100%;margin:5px')" style="border-radius:16px;height:60px;overflow-x:hidden" @click="triggerBreakStart()">
+    <div class="container bg-lightgray flex-center" :class="expanded ? 'bg-gray border-gray' : 'bg-lightgray border-lightgray'" :style="closing ? 'margin:0px;padding:0px;width:0px;opacity:0%' : (expanded ? 'width:200px;opacity:100%;margin:5px' : 'width:50px;opacity:100%;margin:5px')" style="border-radius:16px;height:60px;overflow-x:hidden">
         <div v-if="expanded">
             <div class="flex-center">
                 <span class="material-icons-round text" style="margin-right:5px">hotel</span>
-                <span class="f-medium text">Break</span>
+                <span class="f-medium text">{{ minutes > 60 ? 'Off Work' : 'Break'}}</span>
             </div>
-            <span class="text f-large" style="margin-top:5px">
+            <span class="text f-large" style="margin-top:5px" v-if="minutes > 60">
+                Until {{ this.$parent.$parent.untilTime(this.breakEndTime) }}
+            </span>
+            <span class="text f-large" style="margin-top:5px" v-if="minutes <= 60">
                 {{ breakTimeText }}
             </span>
         </div>
@@ -33,12 +36,20 @@ export default {
             expanded: false,
             closing: false,
             breakEndTime: undefined,
-            breakTimeText: '15:00'
+            breakTimeText: '-:--',
+            minutes: 0,
         }
     },
     mounted() {
+        if((this.$root.now()).getTime() > (new Date(this.breakdata.start_at)).getTime()){
+
+            this.breakEndTime = new Date(this.breakdata.end_at);
+
+            this.triggerBreakStart();
+
+        }
         setInterval(() => {
-            if((new Date()).getTime() > (new Date(this.breakdata.start_at)).getTime()){
+            if((this.$root.now()).getTime() > (new Date(this.breakdata.start_at)).getTime()){
 
                 this.breakEndTime = new Date(this.breakdata.end_at);
 
@@ -55,16 +66,16 @@ export default {
             
 
             setInterval(() => {
-                if(this.breakEndTime < new Date()){
+                if(this.breakEndTime < this.$root.now()){
                     this.breakTimeText = '0:00'
                     this.close()
                     return;
                 }
 
-                let diff = this.breakEndTime - new Date();
-                let minutes = Math.floor((diff/1000)/60)
+                let diff = this.breakEndTime - this.$root.now();
+                this.minutes = Math.floor((diff/1000)/60)
                 let seconds = Math.floor((diff/1000)%60)
-                this.breakTimeText = `${minutes}:${seconds.toString().padStart(2, '0')}`
+                this.breakTimeText = `${this.minutes}:${seconds.toString().padStart(2, '0')}`
             }, 100)
 
             this.expanded = true

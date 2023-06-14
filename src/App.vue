@@ -14,13 +14,22 @@ export default {
     return {
       location: "tcs-plymouth",
       path: "https://pike13.com",
-      redirect: "http://localhost:5173/auth"
+      redirect: "http://localhost:5173/auth",
+      adjustMin: 846
+    }
+  },
+  methods: {
+    now(){
+      var date = new Date();
+      date.setMinutes(date.getMinutes() + this.adjustMin);
+      return date;
     }
   },
   computed: {
     pathLocation (){
       return `${this.path.split("//")[0] + "//" + this.location + "." + this.path.split("//")[1]}`
     }
+    
   }
   
 }
