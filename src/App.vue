@@ -15,7 +15,7 @@ export default {
       location: "tcs-plymouth",
       path: "https://pike13.com",
       redirect: "http://localhost:5173/auth",
-      adjustMin: 846
+      adjustMin: 0
     }
   },
   methods: {
