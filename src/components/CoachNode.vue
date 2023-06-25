@@ -4,7 +4,7 @@
             <span class="text color-green f-xlarge f-bold" style="margin:5px">{{ coach.name }}</span>
             <span class="text color-green f-medium" style="margin:5px">Working until {{ latest }}</span>
         </div>
-        <div style="width:62%;border-radius: 0px 16px 16px 16px;min-height:150px;padding:20px;flex-wrap: wrap;" class="bg-white container flex-center">
+        <div style="width:62%;border-radius: 0px 16px 16px 16px;min-height:150px;padding:20px;flex-wrap: wrap;" class="bg-white container flex-center" :key="timeSections">
             <div v-for="ts in timeSections">
                 <ClassNode v-if="ts.type == 'class'" :classdata="ts.data"/>
                 <BreakNode v-if="ts.type == 'break'" :breakdata="ts.data"/>
@@ -34,6 +34,9 @@
         },
         methods: {
             removeFromTimeSection(eO){
+
+                if(this.timeSections.find(e => e.data.id == eO.id) == undefined) return;
+
                 this.timeSections = this.timeSections.filter((e) => {
                     return e.data.id != eO.id;
                 });
@@ -46,19 +49,21 @@
                     }, 1000);
                     
                 }
+
+               
             },
             updateTimeSections(){
                 var latestTime = new Date("1/1/1970");
                 this.timeSections = [];
 
-                this.$parent.actualClasses[this.coach.id] = this.$parent.actualClasses[this.coach.id].sort((a, b) => {
+                this.$parent.$parent.actualClasses[this.coach.id] = this.$parent.$parent.actualClasses[this.coach.id].sort((a, b) => {
                     var aDate = new Date(a.start_at);
                     var bDate = new Date(b.start_at);
                     return aDate.getTime() - bDate.getTime();
                 });
 
-                for(let i = 0; i < this.$parent.actualClasses[this.coach.id].length; i++){
-                    var c = this.$parent.actualClasses[this.coach.id][i];
+                for(let i = 0; i < this.$parent.$parent.actualClasses[this.coach.id].length; i++){
+                    var c = this.$parent.$parent.actualClasses[this.coach.id][i];
                     
                     if(new Date(c.end_at).getTime() > latestTime.getTime()){
                         latestTime = new Date(c.end_at);
@@ -67,12 +72,12 @@
 
                     if(i > 0){
                         // check for break...
-                        var endPrev = new Date(this.$parent.actualClasses[this.coach.id][i-1].end_at);
+                        var endPrev = new Date(this.$parent.$parent.actualClasses[this.coach.id][i-1].end_at);
                         var startThis = new Date(c.start_at);
 
                         var diff = startThis.getTime() - endPrev.getTime();
 
-                        if(diff > 0){
+                        if(diff > 0 && startThis > this.$root.now()){
                             // there is a break
                             this.timeSections.push({
                                 type: "break",

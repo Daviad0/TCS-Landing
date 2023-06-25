@@ -7,7 +7,7 @@
                 <span class="f-medium text">{{ minutes > 60 ? 'Off Work' : 'Break'}}</span>
             </div>
             <span class="text f-large" style="margin-top:5px" v-if="minutes > 60">
-                Until {{ this.$parent.$parent.untilTime(this.breakEndTime) }}
+                Until {{ this.$parent.$parent.$parent.untilTime(this.breakEndTime) }}
             </span>
             <span class="text f-large" style="margin-top:5px" v-if="minutes <= 60">
                 {{ breakTimeText }}

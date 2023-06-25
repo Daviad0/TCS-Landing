@@ -55,96 +55,29 @@
 
   
 
-  <div class="main flex-center" style="width:100%;margin:0px;padding:0px;border-radius:16px" :style="screen == 'coaches' ? 'max-height:100vh;overflow-y:hidden;opacity:1' : 'max-height:0vh;overflow-y:hidden;opacity:0'">
-    <div style="width:100%;max-height:80vh;overflow-y:scroll" ref="scroll" class="hidescroll">
-      <CoachNode v-for="staff in this.staff.sort((a,b) => a.name.localeCompare(b.name))" :key="staff.id" class="flex-center" :coach="staff"/>
+  <div class="main flex-center " style="width:100%;margin:0px;padding:0px;border-radius:16px">
+    <div class="fade-in-large" style="width:100%" :ref="'mainContent'">
+      <component :is="this.mainFeatures.find(mF => this.screen == mF.name).component" :key="this.screenCheck"/>
     </div>
     
   </div>
-  <div class="main flex-center" style="width:100%;margin:0px;padding:0px;border-radius:16px" :style="screen == 'absent' ? 'max-height:100vh;overflow-y:hidden;opacity:1' : 'max-height:0vh;overflow-y:hidden;opacity:0'">
-    <div style="width:90%;max-height:80vh;overflow-y:scroll" class="hidescroll">
-      <div class="flex-center">
-        <span class="material-icons-round text" style="font-size:30px;margin:5px">
-          cancel
+  
+
+
+
+
+
+  <div class="side-panel" style="margin-right:15px" :ref="'buttonPanel'">
+    <div v-if="screen == 'coaches'" :key="this.screen">
+      <div class="container bg-dim shadow" style="border-radius:40px;margin:10px 0px" v-for="feature in mainFeatures.filter(mF => mF.use && mF.name != this.screen)">
+        <span class="material-icons-round text" style="font-size:25px;margin:5px">
+          {{ feature.icon }}
         </span>
-        <span class="text f-xlarge f-bold" style="margin:5px;margin-top:20px">Mark Student Absent</span>
-      </div>
-      <span class="text f-medium" style="margin:5px">To mark a student as absent for their class periods, select the letter corresponding to your student below...</span>
-      <div class="flex-center" style="flex-wrap:wrap;margin-top:40px">
-        <div v-for="student in this.students" :key="student.id">
-          <div class="container bg-white shadow" style="border-radius:16px;margin:10px;padding:12px 24px">
-            <span class="f-large color-green">{{ student.name }}</span>
-            <div class="flex-center" style="flex-wrap:wrap">
-              <div class="bg-green flex-center" style="padding:4px 8px;border-radius:8px;margin:4px" v-for="c in getClasses(student)" :key="c.id">
-                <span class="material-icons-round" style="font-size:14px;margin-right:5px" :class="`text`" v-if="this.getStatus(student, c) == 'noshow'">cancel</span>
-                <span class="material-icons-round" style="font-size:14px;margin-right:5px" :class="`text`" v-if="this.getStatus(student, c) == 'complete'">check_circle</span>
-                <span class="text f-small">{{ timeRange(c.start_at, c.end_at) }}</span>
-              </div>
-            </div>
-            <Key :character="getLetter(student).toUpperCase()" style="left:-20px;top:-5px"/>
-          </div>
-        </div>
+        <Key :character="buttonLetter(feature)" style="left:-10px;top:-5px"/>
       </div>
       
     </div>
-    
-  </div>
-  <div class="main flex-center" style="width:100%;margin:0px;padding:0px;border-radius:16px" :style="screen == 'present' ? 'max-height:100vh;overflow-y:hidden;opacity:1' : 'max-height:0vh;overflow-y:hidden;opacity:0'">
-    <div style="width:90%;max-height:80vh;overflow-y:scroll" class="hidescroll">
-      <div class="flex-center">
-        <span class="material-icons-round text" style="font-size:30px;margin:5px">
-          check_circle
-        </span>
-        <span class="text f-xlarge f-bold" style="margin:5px;margin-top:20px">Mark Student Present</span>
-      </div>
-      
-      <span class="text f-medium" style="margin:5px">To mark a student as present for their class periods, select the letter corresponding to your student below...</span>
-      <div class="flex-center" style="flex-wrap:wrap;margin-top:40px">
-        <div v-for="student in this.students" :key="student.id">
-          <div class="container bg-white shadow" style="border-radius:16px;margin:10px;padding:12px 24px">
-            <span class="f-large color-green">{{ student.name }}</span>
-            <div class="flex-center" style="flex-wrap:wrap">
-              <div class="bg-green flex-center" style="padding:4px 8px;border-radius:8px;margin:4px" v-for="c in getClasses(student)" :key="c.id">
-                <span class="material-icons-round" style="font-size:14px;margin-right:5px" :class="`text`" v-if="this.getStatus(student, c) == 'noshow'">cancel</span>
-                <span class="material-icons-round" style="font-size:14px;margin-right:5px" :class="`text`" v-if="this.getStatus(student, c) == 'complete'">check_circle</span>
-                <span class="text f-small">{{ timeRange(c.start_at, c.end_at) }}</span>
-              </div>
-            </div>
-            <Key :character="getLetter(student).toUpperCase()" style="left:-20px;top:-5px"/>
-          </div>
-        </div>
-      </div>
-      
-    </div>
-    
-  </div>
-
-
-
-
-
-  <div class="side-panel" style="margin-right:15px">
-    <div v-if="screen == 'coaches'">
-      <div class="container bg-dim shadow" style="border-radius:40px;margin:10px 0px">
-        <span class="material-icons-round text" style="font-size:25px;margin:5px">
-          person_remove
-        </span>
-        <Key :character="'0'" style="left:-10px;top:-5px"/>
-      </div>
-      <div class="container bg-dim shadow" style="border-radius:40px;margin:10px 0px">
-        <span class="material-icons-round text" style="font-size:25px;margin:5px">
-          check
-        </span>
-        <Key :character="'1'" style="left:-10px;top:-5px"/>
-      </div>
-      <div class="container bg-dim shadow" style="border-radius:40px;margin:10px 0px">
-        <span class="material-icons-round text" style="font-size:25px;margin:5px">
-          settings
-        </span>
-        <Key :character="'2'" style="left:-10px;top:-5px"/>
-      </div>
-    </div>
-    <div v-if="screen == 'absent'">
+    <div v-if="screen == 'absent'" :key="this.screen">
       <div class="container bg-dim shadow" style="border-radius:40px;margin:10px 0px">
         <span class="material-icons-round text" style="font-size:25px;margin:5px">
           arrow_back
@@ -153,7 +86,7 @@
       </div>
       
     </div>
-    <div v-if="screen == 'present'">
+    <div v-if="screen == 'present'" :key="this.screen">
       <div class="container bg-dim shadow" style="border-radius:40px;margin:10px 0px">
         <span class="material-icons-round text" style="font-size:25px;margin:5px">
           arrow_back
@@ -173,6 +106,45 @@
   var phaseTimes = [6000, 10000, 8000, 8000, 5000];
   var welcomes = ["var greeting = 'Hello'", "Welcome();", "<p>Happy to see you!</p>", "console.log('Welcome!')", "01101000 01101001", "char[] greeting = {'H', 'e', 'l', 'l', 'o'};"]
   var letters = "abcdefghijklmnopqrstuvwxyz123456789,./;[]-";
+  
+
+  import Absent from '../components/features/Absent.vue';
+  import Present from '../components/features/Present.vue';
+  import Classes from '../components/features/Classes.vue';
+
+  var mainFeatures = [
+    {
+      name: "coaches",
+      icon: "",
+      use: true,
+      component: Classes
+    },
+    {
+      name: "absent",
+      icon: "person_remove",
+      use: true,
+      component: Absent
+    },
+    {
+      name: "present",
+      icon: "check",
+      use: true,
+      component: Present
+    },
+    {
+      name: "settings",
+      icon: "settings",
+      use: true
+    },
+    {
+      name: "search",
+      icon: "search",
+      use: true
+    }
+
+  ]
+
+
   var quotes = [
     {
       author: 'Kirby',
@@ -208,6 +180,7 @@
         staff: [],
         showKeys: false,
         screen: "coaches",
+        screenCheck: 0,
         updateStudentAbsentClasses: 0,
         statusCheck: 0,
         cacheClasses: {},
@@ -222,7 +195,8 @@
           show: false,
           icon: "",
         },
-        hours: "-:-- to -:--"
+        hours: "-:-- to -:--",
+        mainFeatures: mainFeatures
       }
     },
     mounted() {
@@ -231,16 +205,15 @@
       document.addEventListener('keyup', (evt) => {
         switch(this.screen){
           case "coaches":
-            if(evt.key == '0') {
-              this.screen = "absent"
-            }
-            if(evt.key == '1') {
-              this.screen = "present"
-            }
+            this.mainFeatures.filter(mF => mF.use && mF.name != this.screen).forEach(mF => {
+              if(this.buttonLetter(mF) == evt.key){
+                this.switchScreen(mF.name);
+              }
+            })
             break;
           case "absent":
             if(evt.key == '0') {
-              this.screen = "coaches"
+              this.switchScreen('coaches');
             }
 
             // get index of key in letters
@@ -257,14 +230,14 @@
 
               this.markStudentStatus(this.students[index], closestClass, "noshow", "cancel");
               this.showMessage(`${this.students[index].name} was marked as absent!`, 4000);
-              this.screen = "coaches"
+              this.switchScreen('coaches');
             }
 
 
             break;
           case "present":
             if(evt.key == '0') {
-              this.screen = "coaches"
+              this.switchScreen('coaches');
             }
 
             // get index of key in letters
@@ -281,7 +254,7 @@
 
               this.markStudentStatus(this.students[index], closestClass, "complete", "check_circle");
               this.showMessage(`${this.students[index].name} was marked as present!`, 4000);
-              this.screen = "coaches"
+              this.switchScreen('coaches');
             }
 
 
@@ -311,12 +284,12 @@
 
       setInterval(() => {
 
-        this.$refs.scroll.scrollBy(0,this.scroll.dir* 1);
-        this.scroll.amount--;
-        if(this.scroll.amount == 0){
-          this.scroll.dir = -this.scroll.dir;
-          this.scroll.amount = 1000;
-        }
+        // this.$refs.scroll.scrollBy(0,this.scroll.dir* 1);
+        // this.scroll.amount--;0
+        // if(this.scroll.amount == 0){
+        //   this.scroll.dir = -this.scroll.dir;
+        //   this.scroll.amount = 1000;
+        // }
 
         if((new Date().getTime() - this.tr.timefrom) < phaseTimes[this.tr.phase]) return;
 
@@ -338,6 +311,22 @@
       
     },
     methods: {
+      switchScreen(newScreen){
+        this.$refs.mainContent.classList = 'fade-out-large';
+        this.$refs.buttonPanel.style.opacity = '0';
+        setTimeout(() => {
+          this.screen = newScreen;
+
+          this.screenCheck++;
+          this.$refs.buttonPanel.style.opacity = '1';
+          this.$refs.mainContent.classList = 'fade-in-large'
+          
+
+          
+          
+        }, 1100)
+
+      },
       showMessage(text, duration, icon){
         if(this.message.show) return;
 
@@ -348,6 +337,13 @@
         setTimeout(() => {
           this.message.show = false;
         }, duration)
+      },
+      buttonLetter(fin){
+        var useLetters = '01232456789';
+        if(!fin.use) return '';
+        var indexOfFeature = this.mainFeatures.filter(mF => mF.use && mF.name != this.screen).indexOf(fin);
+
+        return useLetters.substring(indexOfFeature, indexOfFeature+1);
       },
       randomSelector(){
         this.randomSelectorNum = Math.floor(Math.random() * 1000)
