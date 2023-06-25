@@ -77,7 +77,7 @@
       </div>
       
     </div>
-    <div v-if="screen == 'absent'" :key="this.screen">
+    <div v-if="screen != 'coaches'" :key="this.screen">
       <div class="container bg-dim shadow" style="border-radius:40px;margin:10px 0px">
         <span class="material-icons-round text" style="font-size:25px;margin:5px">
           arrow_back
@@ -86,15 +86,7 @@
       </div>
       
     </div>
-    <div v-if="screen == 'present'" :key="this.screen">
-      <div class="container bg-dim shadow" style="border-radius:40px;margin:10px 0px">
-        <span class="material-icons-round text" style="font-size:25px;margin:5px">
-          arrow_back
-        </span>
-        <Key :character="'0'" style="left:-10px;top:-5px"/>
-      </div>
-      
-    </div>
+    
     
   </div>
 </template>
@@ -111,6 +103,7 @@
   import Absent from '../components/features/Absent.vue';
   import Present from '../components/features/Present.vue';
   import Classes from '../components/features/Classes.vue';
+  import Search from '../components/features/Search.vue';
 
   var mainFeatures = [
     {
@@ -139,7 +132,8 @@
     {
       name: "search",
       icon: "search",
-      use: true
+      use: true,
+      component: Search
     }
 
   ]
@@ -196,13 +190,36 @@
           icon: "",
         },
         hours: "-:-- to -:--",
-        mainFeatures: mainFeatures
+        mainFeatures: mainFeatures,
+        allPeople: [],
+        showIdle: false,
+        saveLatestTime: new Date()
       }
     },
     mounted() {
 
+      // setTimeout(async () => {
+      //   var totalPeople = 500;
+
+
+      //   for(var i = 1; this.allPeople.length < totalPeople; i++){
+      //     
+
+      //     this.allPeople.concat(res.data.people);
+          
+      //   }
+
+
+        
+      // }, 500)
+      
 
       document.addEventListener('keyup', (evt) => {
+
+        if(this.$root.showAccessPanel){
+          return;
+        }
+
         switch(this.screen){
           case "coaches":
             this.mainFeatures.filter(mF => mF.use && mF.name != this.screen).forEach(mF => {
@@ -256,6 +273,15 @@
               this.showMessage(`${this.students[index].name} was marked as present!`, 4000);
               this.switchScreen('coaches');
             }
+
+
+            break;
+          case "search":
+            if(evt.key == '0') {
+              this.switchScreen('coaches');
+            }
+
+            
 
 
             break;
@@ -461,6 +487,9 @@
             //if(new Date(eO.end_at) < plusOneMin) return;
 
             eO.staff_members.forEach(sM => {
+
+              if(new Date(eO.end_at) < this.$root.now()) return;
+
               if(this.staff.find(s => s.id == sM.id) == undefined) {
                 this.staff.push(sM)
                 this.actualClasses[sM.id] = []
@@ -496,10 +525,18 @@
 
 
           this.hours = this.timeRange(earliestTime, latestTime);
+          this.saveLatestTime = latestTime;
+          if(this.$root.now() > latestTime){
+            this.showIdle = true;
+          }else{
+            this.showIdle = false;
+          }
 
         }).catch((err) => {
           console.log(err)
         });
+
+        
 
 
         // this.students.forEach(s => {

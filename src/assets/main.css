@@ -170,6 +170,9 @@ span{
 .bg-greenlight{
   background-color: rgba(0,228,4,1);
 }
+.bg-red{
+  background-color: #c40000;
+}
 
 
 .border-green{
@@ -199,6 +202,9 @@ span{
 .border-transparent{
   border: 2px solid transparent;
 }
+.border-white{
+  border: 2px solid #fff;
+}
 
 
 .flex-center{
@@ -218,6 +224,12 @@ span{
 }
 .shadow-less{
   box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.75);
+}
+.text-shadow{
+  text-shadow: 0px 0px 10px rgba(0,0,0,0.75);
+}
+.text-shadow-less{
+  text-shadow: 0px 0px 4px rgba(0,0,0,0.75);
 }
 .greenglow{
   box-shadow: 0px 0px 15px 0px rgba(0,228,4,.8);
@@ -289,4 +301,47 @@ span{
     opacity: 0;
     transform: translateY(30px);
   }
+}
+
+
+.random-move-1{
+  animation: randomMove1 20s ease infinite;
+
+}
+@keyframes randomMove1 {
+  0%{
+    transform: translate(0px, 0px);
+  }
+  10%{
+    transform: translate(10px, 10px);
+  }
+  20%{
+    transform: translate(5px, 8px);
+  }
+  30%{
+    transform: translate(-2px, 9px);
+  }
+  40%{
+    transform: translate(3px, 3px);
+  }
+  50%{
+    transform: translate(-5px, -6px);
+  }
+  60%{
+    transform: translate(-7px, -2px);
+  }
+  70%{
+    transform: translate(-1px, -4px);
+  }
+  80%{
+    transform: translate(2px, 4px);
+  }
+  90%{
+    transform: translate(1px, 1px);
+  }
+  100%{
+    transform: translate(0px, 0px);
+  }
+
+
 }

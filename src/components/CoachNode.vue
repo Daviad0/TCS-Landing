@@ -47,6 +47,9 @@
                     setTimeout(() => {
                         this.$refs.base.style.display = "none";
                     }, 1000);
+                    setTimeout(() => {
+                        this.$parent.checkShouldShow();
+                    }, 2000);
                     
                 }
 
