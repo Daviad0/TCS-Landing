@@ -98,7 +98,7 @@ export default {
         this.icon = res.icon;
 
         if(this.class.people.length > 3){
-            this.width = "600px";
+            this.width = "40vw";
             this.color = "blue";
             this.icon = "star"
         }

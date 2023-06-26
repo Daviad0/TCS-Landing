@@ -12,7 +12,7 @@
     <div class="flex-center" style="flex-wrap:wrap;padding-bottom:20px;align-items: start;">
         <div class="bg-white flex-center" style="border-radius: 16px;margin:10px;overflow:hidden" v-for="c in this.$parent.multiStaffClasses" >
             <div :style="!hideMultiClasses.includes(c.id) ? 'max-height:500px;margin:20px;opacity:1' : 'max-height:0px;margin:0px 20px;opacity:0'" :key="multiClassUpdate">
-                <span class="f-medium" style="margin-bottom:15px;width:600px" :style="`color:${this.$root.settings.color}`">{{ generateStringOfStaff(c.staff_members, c.id) }}</span>
+                <span class="f-medium" style="margin-bottom:15px;width:40vw" :style="`color:${this.$root.settings.color}`">{{ generateStringOfStaff(c.staff_members, c.id) }}</span>
                 <ClassNode :classdata="c" :baselanding="this.$parent"/>
             </div>
             
