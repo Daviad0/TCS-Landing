@@ -4,7 +4,7 @@
             <span class="text f-xlarge f-bold" style="margin:5px" :style="`color:${this.$root.settings.color}`">{{ coach.name }}</span>
             <span class="text f-medium" style="margin:5px" :style="`color:${this.$root.settings.color}`">Working until {{ latest }}</span>
         </div>
-        <div style="width:62%;border-radius: 0px 16px 16px 16px;min-height:150px;padding:20px;flex-wrap: wrap;" class="bg-white container flex-center" :key="timeSections">
+        <div style="width:62%;border-radius: 0px 16px 16px 16px;min-height:100px;padding:20px;flex-wrap: wrap;" class="bg-white container flex-center" :key="timeSections">
             <div v-for="ts in timeSections">
                 <ClassNode v-if="ts.type == 'class'" :classdata="ts.data" :baselanding="this.$parent.$parent"/>
                 <BreakNode v-if="ts.type == 'break'" :breakdata="ts.data"/>
@@ -42,7 +42,7 @@
                     return e.data.id != eO.id;
                 });
 
-                if(this.timeSections.filter(t => t.type == 'class').length == 0){
+                if(this.timeSections.filter(t => t.type == 'class' || t.type == 'multi').length == 0){
                     // collapse coach
                     this.show = false;
                     setTimeout(() => {
@@ -128,7 +128,7 @@
                         data: c
                     });
                 }
-                if(this.timeSections.filter(t => t.type == 'class').length == 0){
+                if(this.timeSections.filter(t => t.type == 'class' || t.type == 'multi').length == 0){
                     // collapse coach
                     this.show = false;
                     setTimeout(() => {
