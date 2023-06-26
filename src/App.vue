@@ -38,7 +38,7 @@ export default {
       location: "tcs-plymouth",
       path: "https://pike13.com",
       redirect: "http://localhost:5173/auth",
-      adjustMin: 0,
+      adjustMin: -121,
       accessCode: '0ffbyabyte!',
       accessCB: () => {},
       showAccessPanel: false,

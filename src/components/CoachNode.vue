@@ -69,13 +69,7 @@
                 for(let i = 0; i < this.$parent.$parent.actualClasses[this.coach.id].length; i++){
                     var c = this.$parent.$parent.actualClasses[this.coach.id][i];
 
-                    if(c.staff_members.length > 1){
-                        this.timeSections.push({
-                            type: "multi",
-                            data: c
-                        })
-                        continue;
-                    }
+                    
 
                     // if(c.staff_members.length > 1) return;
                     // // put in the multi class
@@ -83,6 +77,14 @@
                     if(new Date(c.end_at).getTime() > latestTime.getTime()){
                         latestTime = new Date(c.end_at);
                         this.latest = latestTime.toLocaleString('en-US', { hour: 'numeric', hour12: true });
+                    }
+
+                    if(c.staff_members.length > 1){
+                        this.timeSections.push({
+                            type: "multi",
+                            data: c
+                        })
+                        continue;
                     }
 
                     if(i > 0){
