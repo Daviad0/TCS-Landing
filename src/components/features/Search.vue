@@ -17,8 +17,8 @@
                 <div class="bg-white shadow" style="padding:20px;border-radius: 16px;width:80%;margin:5px">
                     <div class="flex-apart">
                         <div>
-                            <span class="f-large color-green f-bold" style="text-align: left;">{{ result.person.first_name }} {{ result.person.last_name }}</span>
-                            <span class="f-medium color-green" style="text-align: left;" :key="result.dep">{{ result.dep ? `Child of ${result.dep.first_name} ${result.dep.last_name}` : `Student` }}</span>
+                            <span class="f-large f-bold" :style="`color:${this.$root.settings.color}`" style="text-align: left;">{{ result.person.first_name }} {{ result.person.last_name }}</span>
+                            <span class="f-medium" :style="`color:${this.$root.settings.color}`" style="text-align: left;" :key="result.dep">{{ result.dep ? `Child of ${result.dep.first_name} ${result.dep.last_name}` : `Student` }}</span>
                         </div>
                         
                         <div class="bg-green" style="padding:5px 8px;border-radius: 8px;">
@@ -66,7 +66,8 @@
             return {
                 results: [],
                 searchDisabled: false,
-                resultCheck: 0
+                resultCheck: 0,
+                rememberSeed: this.$parent.pageKeySeed
             }
         },
         mounted() {
@@ -74,6 +75,7 @@
             document.addEventListener('keyup', (e) => {
 
                 if(this.$root.showAccessPanel) return;
+                if(this.$parent.pageKeySeed != this.rememberSeed) return;
 
                 // if backspace
                 if(e.keyCode == 8) {

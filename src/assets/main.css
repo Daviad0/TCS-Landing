@@ -68,14 +68,19 @@ Font Configurations...
   display: none;  /* Safari and Chrome */
 }
 
-html {
-  width:100vw;
-  height:100vh;
-  background: rgb(3,134,0);
-  background: linear-gradient(90deg, rgba(3,134,0,1) 0%, rgba(0,228,4,1) 100%);
+
+body { 
+  /* background: rgb(3,134,0); */
+  /* background: linear-gradient(90deg, rgba(3,134,0,1) 0%, rgba(0,228,4,1) 100%); */
   background-repeat: no-repeat;
   background-size: cover;
   transition: background 0s ease;
+}
+
+html {
+  width:100vw;
+  height:100vh;
+  
   overflow:hidden;
 }
 
@@ -344,4 +349,12 @@ span{
   }
 
 
+}
+
+
+
+.input{
+  border:none;
+  border-radius: 16px;
+  padding:6px 10px;
 }

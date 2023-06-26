@@ -104,6 +104,7 @@
   import Present from '../components/features/Present.vue';
   import Classes from '../components/features/Classes.vue';
   import Search from '../components/features/Search.vue';
+  import Settings from '../components/features/Settings.vue';
 
   var mainFeatures = [
     {
@@ -127,7 +128,8 @@
     {
       name: "settings",
       icon: "settings",
-      use: true
+      use: true,
+      component: Settings
     },
     {
       name: "search",
@@ -193,7 +195,8 @@
         mainFeatures: mainFeatures,
         allPeople: [],
         showIdle: false,
-        saveLatestTime: new Date()
+        saveLatestTime: new Date(),
+        pageKeySeed: ""
       }
     },
     mounted() {
@@ -213,6 +216,7 @@
         
       // }, 500)
       
+      this.generateNewSeed();
 
       document.addEventListener('keyup', (evt) => {
 
@@ -285,6 +289,15 @@
 
 
             break;
+          case "settings":
+            if(evt.key == '0') {
+              this.switchScreen('coaches');
+            }
+
+            
+
+
+            break;
         }
       })
 
@@ -337,9 +350,13 @@
       
     },
     methods: {
+      generateNewSeed(){
+        this.pageKeySeed = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      },
       switchScreen(newScreen){
         this.$refs.mainContent.classList = 'fade-out-large';
         this.$refs.buttonPanel.style.opacity = '0';
+        this.generateNewSeed();
         setTimeout(() => {
           this.screen = newScreen;
 

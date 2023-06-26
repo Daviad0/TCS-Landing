@@ -2,8 +2,8 @@
     <div v-if="this.$parent.showIdle" style="height:80vh" class="flex-center fade-in-large">
         <div>
             <span class="f-xlarge text text-shadow-less" style="font-size:80px">Learn to code,</span>
-            <div class="border-white" style="border-width:4px;height:400px;border-radius: 40px;margin:10px 0px">
-
+            <div class="border-white flex-center" style="border-width:4px;height:400px;border-radius: 40px;margin:10px 0px">
+                <img src="@/assets/tcs-logo.png" height="200"  style="margin-top:12px"/>
             </div>
             <span class="f-xlarge text f-bold text-shadow" style="font-size:90px">change the world</span>
         </div>
@@ -35,6 +35,16 @@
                     this.$parent.showMessage(message, 10000);
                 }
             }
+        },
+        mounted(){
+            setInterval(() => {
+                this.$refs.scroll.scrollBy(0,this.$parent.scroll.dir* 1);
+                this.$parent.scroll.amount--;0
+                if(this.$parent.scroll.amount == 0){
+                  this.$parent.scroll.dir = -this.$parent.scroll.dir;
+                  this.$parent.scroll.amount = 1000;
+                }
+            }, 100)
         }
     }
 </script>
