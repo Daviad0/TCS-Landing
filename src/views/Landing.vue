@@ -196,7 +196,8 @@
         allPeople: [],
         showIdle: false,
         saveLatestTime: new Date(),
-        pageKeySeed: ""
+        pageKeySeed: "",
+        multiStaffClasses: []
       }
     },
     mounted() {
@@ -461,6 +462,8 @@
         });
 
         var studentsCheck = [];
+        var setMultiClasses = [];
+        
 
         var earliestTime = new Date('3000-01-01T00:00:00.000Z');
         var latestTime = new Date('1000-01-01T00:00:00.000Z');
@@ -472,6 +475,9 @@
             var plusOneMin = this.$root.now();
             plusOneMin.setMinutes(plusOneMin.getMinutes() + 1);
 
+            if(eO.staff_members.length > 1 && setMultiClasses.find(msc => msc.id == eO.id) == undefined && new Date(eO.end_at) > this.$root.now()) {
+              setMultiClasses.push(eO);
+            }
             
             if(new Date(eO.start_at) < earliestTime){
               earliestTime = new Date(eO.start_at);
@@ -548,6 +554,8 @@
           }else{
             this.showIdle = false;
           }
+
+          this.multiStaffClasses = setMultiClasses;
 
         }).catch((err) => {
           console.log(err)

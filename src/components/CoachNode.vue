@@ -6,8 +6,9 @@
         </div>
         <div style="width:62%;border-radius: 0px 16px 16px 16px;min-height:150px;padding:20px;flex-wrap: wrap;" class="bg-white container flex-center" :key="timeSections">
             <div v-for="ts in timeSections">
-                <ClassNode v-if="ts.type == 'class'" :classdata="ts.data"/>
+                <ClassNode v-if="ts.type == 'class'" :classdata="ts.data" :baselanding="this.$parent.$parent"/>
                 <BreakNode v-if="ts.type == 'break'" :breakdata="ts.data"/>
+                <MultiNode v-if="ts.type == 'multi'" :classdata="ts.data" :baselanding="this.$parent.$parent"/>
             </div>
         </div>
     </div>
@@ -67,6 +68,17 @@
 
                 for(let i = 0; i < this.$parent.$parent.actualClasses[this.coach.id].length; i++){
                     var c = this.$parent.$parent.actualClasses[this.coach.id][i];
+
+                    if(c.staff_members.length > 1){
+                        this.timeSections.push({
+                            type: "multi",
+                            data: c
+                        })
+                        continue;
+                    }
+
+                    // if(c.staff_members.length > 1) return;
+                    // // put in the multi class
                     
                     if(new Date(c.end_at).getTime() > latestTime.getTime()){
                         latestTime = new Date(c.end_at);
