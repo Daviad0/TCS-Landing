@@ -38,7 +38,7 @@ export default {
       location: "tcs-plymouth",
       path: "https://pike13.com",
       redirect: "http://localhost:5173/auth",
-      adjustMin: -121,
+      adjustMin: 519,
       accessCode: '0ffbyabyte!',
       accessCB: () => {},
       showAccessPanel: false,
@@ -47,13 +47,22 @@ export default {
         // diagonal rainbow linear gradient
         bggradient: "linear-gradient(45deg, #ff8282, #fffc8c, #79ff80, #65d1ff, #e47bff)",
         darken: 0.3
-      }
+      },
+      appReviews: []
     }
   },
   mounted(){
 
     // set html background
     document.body.style.background = this.settings.bggradient;
+
+
+    this.axios.defaults.withCredentials = false;
+    
+
+    this.axios.get(`https://tcs-landing-api.daveeddigs.repl.co/apps`).then((res) => {
+        this.appReviews = res.data.apps;
+    });
 
 
     document.addEventListener('keydown', (e) => {

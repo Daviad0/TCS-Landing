@@ -549,10 +549,33 @@
 
           this.hours = this.timeRange(earliestTime, latestTime);
           this.saveLatestTime = latestTime;
-          if(this.$root.now() > latestTime){
-            this.showIdle = true;
+
+          
+          var earlyTimeDiff = this.$root.now().getTime() - earliestTime.getTime();
+
+          if(this.$root.now() > latestTime || earlyTimeDiff < -900000){
+
+            if(!this.showIdle){
+              this.switchScreen("coaches");
+              setTimeout(() => {
+                this.showIdle = true;
+              }, 900);
+            }else{
+              this.showIdle = true;
+            }
+            
           }else{
-            this.showIdle = false;
+
+            if(this.showIdle){
+              this.switchScreen("coaches");
+              setTimeout(() => {
+                this.showIdle = false;
+              }, 900);
+            }else{
+              this.showIdle = false;
+            }
+
+            
           }
 
           this.multiStaffClasses = setMultiClasses;
