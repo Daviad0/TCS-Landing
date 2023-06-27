@@ -48,7 +48,9 @@ export default {
         bggradient: "linear-gradient(45deg, #ff8282, #fffc8c, #79ff80, #65d1ff, #e47bff)",
         darken: 0.3
       },
-      appReviews: []
+      appReviews: [],
+      notes: [],
+      accountInformation: {}
     }
   },
   mounted(){
@@ -59,10 +61,15 @@ export default {
 
     this.axios.defaults.withCredentials = false;
     
+    this.axios.get(`https://pike13.com/api/v2/account`,{headers: {'Authorization': `Bearer ${this.$cookies.get('token')}`}}).then((res) => {
+      this.accountInformation = res.data.accounts[0];
+    });
 
     this.axios.get(`https://tcs-landing-api.daveeddigs.repl.co/apps`).then((res) => {
         this.appReviews = res.data.apps;
     });
+
+    
 
 
     document.addEventListener('keydown', (e) => {

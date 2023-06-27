@@ -13,10 +13,18 @@
                 </div>
             </div>
             <div class="flex-center" style="flex-wrap:wrap;margin-top:5px" v-if="this.class.people.length > 0">
-                <div :class="this.baselanding.getStatus(person, this.classdata) == 'complete' ? `border-${color}` : ''" class="bg-white shadow-less flex-center" v-for="person in this.class.people" :key="person.id" style="padding:4px 8px;border-radius: 8px;margin:4px">
-                    <span class="material-icons-round" style="font-size:18px;margin-right:5px" :class="`color-red`" v-if="this.baselanding.getStatus(person, this.classdata) == 'noshow'">cancel</span>
-                    <span class="material-icons-round" style="font-size:18px;margin-right:5px" :class="`color-${color}`" v-if="this.baselanding.getStatus(person, this.classdata) == 'complete'">check_circle</span>
-                    <span class="f-small" :class="this.baselanding.getStatus(person, this.classdata) == 'noshow' ? 'color-red' :`color-${color}`" :style="this.baselanding.getStatus(person, this.classdata) == 'noshow' ? 'text-decoration:line-through' : ''">{{ person.name }}</span>
+                <div :class="this.baselanding.getStatus(person, this.classdata) == 'complete' ? `border-${color}` : ''" class="bg-white shadow-less" v-for="person in this.class.people" :key="person.id" style="padding:4px 8px;border-radius: 8px;margin:4px">
+                    <div class="flex-center">
+                        <span class="material-icons-round" style="font-size:18px;margin-right:5px" :class="`color-red`" v-if="this.baselanding.getStatus(person, this.classdata) == 'noshow'">cancel</span>
+                        <span class="material-icons-round" style="font-size:18px;margin-right:5px" :class="`color-${color}`" v-if="this.baselanding.getStatus(person, this.classdata) == 'complete'">check_circle</span>
+                        <span class="f-small" :class="this.baselanding.getStatus(person, this.classdata) == 'noshow' ? 'color-red' :`color-${color}`" :style="this.baselanding.getStatus(person, this.classdata) == 'noshow' ? 'text-decoration:line-through' : ''">{{ person.name }}</span>
+                        <div :class="`bg-${color}`" :style="selected ? 'opacity:1' : 'opacity:0.8'" style="padding:4px 8px;border-radius: 8px;margin-left:8px" v-if="getLanguage(person.id) != 'None'">
+                            <span class="text" style="font-size:0.6rem">{{ getLanguage(person.id) }}</span>
+                            
+                        </div>
+                        
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -138,6 +146,12 @@ export default {
                 }
             }
             return config;
+        },
+        getLanguage(sid){
+            if(this.baselanding.studentNoteDetail[sid] == undefined){
+                return "None"
+            }
+            return this.baselanding.studentNoteDetail[sid].language;
         }
     },
     computed: {

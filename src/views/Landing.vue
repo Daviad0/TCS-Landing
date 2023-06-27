@@ -197,7 +197,8 @@
         showIdle: false,
         saveLatestTime: new Date(),
         pageKeySeed: "",
-        multiStaffClasses: []
+        multiStaffClasses: [],
+        studentNoteDetail: {}
       }
     },
     mounted() {
@@ -320,7 +321,17 @@
         this.refreshAPI()
       }, 20000);
 
+      setInterval(() => {
+        var replaceStuNoteDetail = {}
+        this.students.forEach(async s => {
+          if(replaceStuNoteDetail[s.id] != undefined) return;
 
+          var apiRes = await this.axios.get(`https://tcs-landing-api.daveeddigs.repl.co/student?stuId=${s.id}&staffId=${this.$root.accountInformation.id}&location={${this.$root.location.split("-")[0]}&name=${this.$root.accountInformation.first_name}%${this.$root.accountInformation.last_name}&token=${this.$cookies.get('token')}`);
+          replaceStuNoteDetail[s.id] = apiRes.data;
+        })
+
+        this.studentNoteDetail = replaceStuNoteDetail;
+      }, 30000000);
 
       setInterval(() => {
 
@@ -579,6 +590,16 @@
           }
 
           this.multiStaffClasses = setMultiClasses;
+          setTimeout(() => {
+            this.students.forEach(async s => {
+              if(this.studentNoteDetail[s.id] != undefined) return;
+
+              var apiRes = await this.axios.get(`https://tcs-landing-api.daveeddigs.repl.co/student?stuId=${s.id}&staffId=${this.$root.accountInformation.id}&location={${this.$root.location.split("-")[0]}&name=${this.$root.accountInformation.first_name}%${this.$root.accountInformation.last_name}&token=${this.$cookies.get('token')}`);
+              this.studentNoteDetail[s.id] = apiRes.data;
+            })
+          }, 3000);
+          
+
 
         }).catch((err) => {
           console.log(err)
