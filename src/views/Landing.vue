@@ -105,6 +105,7 @@
   import Classes from '../components/features/Classes.vue';
   import Search from '../components/features/Search.vue';
   import Settings from '../components/features/Settings.vue';
+  import Coach from '../components/features/Coach.vue';
 
   var mainFeatures = [
     {
@@ -136,6 +137,12 @@
       icon: "search",
       use: true,
       component: Search
+    },
+    {
+      name: "coach",
+      icon: "",
+      use: false,
+      component: Coach
     }
 
   ]
@@ -198,7 +205,8 @@
         saveLatestTime: new Date(),
         pageKeySeed: "",
         multiStaffClasses: [],
-        studentNoteDetail: {}
+        studentNoteDetail: {},
+        featureData: {}
       }
     },
     mounted() {
@@ -231,6 +239,12 @@
             this.mainFeatures.filter(mF => mF.use && mF.name != this.screen).forEach(mF => {
               if(this.buttonLetter(mF) == evt.key){
                 this.switchScreen(mF.name);
+              }
+            })
+            this.staff.forEach((staff) => {
+              if(this.letterOfCoach(staff) == evt.key){
+                this.switchScreen('coach');
+                this.featureData = staff;
               }
             })
             break;
@@ -292,6 +306,15 @@
 
             break;
           case "settings":
+            if(evt.key == '0') {
+              this.switchScreen('coaches');
+            }
+
+            
+
+
+            break;
+          case "coach":
             if(evt.key == '0') {
               this.switchScreen('coaches');
             }
@@ -399,6 +422,11 @@
         var indexOfFeature = this.mainFeatures.filter(mF => mF.use && mF.name != this.screen).indexOf(fin);
 
         return useLetters.substring(indexOfFeature, indexOfFeature+1);
+      },
+      letterOfCoach(coach){
+        var useLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var index = this.staff.indexOf(coach);
+        return useLetters.substring(index, index+1).toLowerCase();
       },
       randomSelector(){
         this.randomSelectorNum = Math.floor(Math.random() * 1000)

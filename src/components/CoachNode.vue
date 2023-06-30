@@ -1,9 +1,11 @@
 <template>
     <div ref="base" class="flex-center" style="padding:0px;align-items: start" :style="show ? 'margin:20px 0px;max-height:800px;overflow-y:hidden;opacity:1' : 'margin:0px;max-height:0px;overflow-y:hidden;margin-top:-20px;opacity:0'">
+        <Key :character="this.$parent.$parent.letterOfCoach(this.coach).toUpperCase()" style="left:-5px;bottom:0"/>
         <div style="width:30%;border-radius: 16px 0px 0px 16px;padding:20px 0px;max-width:400px;min-width:250px" class="bg-white container">
             <span class="text f-xlarge f-bold" style="margin:5px" :style="`color:${this.$root.settings.color}`">{{ coach.name }}</span>
             <span class="text f-medium" style="margin:5px" :style="`color:${this.$root.settings.color}`">Working until {{ latest }}</span>
         </div>
+        
         <div style="width:62%;border-radius: 0px 16px 16px 16px;min-height:100px;padding:20px;flex-wrap: wrap;" class="bg-white container flex-center" :key="timeSections">
             <div v-for="ts in timeSections">
                 <ClassNode v-if="ts.type == 'class'" :classdata="ts.data" :baselanding="this.$parent.$parent"/>
