@@ -39,7 +39,7 @@
                                     </div>
 
                                     
-                                    <div class="bg-gray" style="padding:6px 10px;border-radius: 8px;" v-if="this.$parent.studentNoteDetail[student.id] == undefined && this.$parent.studentNoteDetail[student.id].language != 'None'">
+                                    <div class="bg-gray" style="padding:6px 10px;border-radius: 8px;" v-if="this.$parent.studentNoteDetail[student.id] == undefined || this.$parent.studentNoteDetail[student.id].language == 'None'">
                                         <span class="f-small text">No Previous Notes</span>
                                         
                                     </div>

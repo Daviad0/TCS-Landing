@@ -21,29 +21,29 @@
                             <span class="f-medium" :style="`color:${this.$root.settings.color}`" style="text-align: left;" :key="result.dep">{{ result.dep ? `Child of ${result.dep.first_name} ${result.dep.last_name}` : `Student` }}</span>
                         </div>
                         
-                        <div class="bg-green" style="padding:5px 8px;border-radius: 8px;">
+                        <div :style="`background-color:${this.$root.settings.color}`" style="padding:5px 8px;border-radius: 8px;">
                             <span class="f-small text">{{ result.person.membership }}</span>
                         </div>
                     </div>
                     
-                    <div class="border-green flex-center" style="padding:10px;border-radius: 16px;margin-top:20px;flex-wrap:wrap">
+                    <div class="border-green flex-center" :style="`border-color:${this.$root.settings.color}`" style="padding:10px;border-radius: 16px;margin-top:20px;flex-wrap:wrap">
                         
-                        <div class="bg-green" style="padding:6px 10px;border-radius: 8px;" v-if="!result.unlocked">
+                        <div :style="`background-color:${this.$root.settings.color}`" style="padding:6px 10px;border-radius: 8px;" v-if="!result.unlocked">
                             <span class="f-small text">Unlock Contact Details</span>
                             <Key :character="letterInResult(result.person.first_name + ' ' + result.person.last_name)" style="left:-25px;top:-20px"/>
                         </div>
 
-                        <div class="flex-center bg-green" style="padding:6px 10px;border-radius: 12px;margin:5px" v-if="result.unlocked">
+                        <div class="flex-center" :style="`background-color:${this.$root.settings.color}`" style="padding:6px 10px;border-radius: 12px;margin:5px" v-if="result.unlocked">
 
                             <span class="material-icons-round text" style="font-size:24px">phone</span>
                             <span style="margin-left:10px" class="f-medium text">{{ result.dep.phone }}</span>
                         </div>
-                        <div class="flex-center bg-green" style="padding:6px 10px;border-radius: 12px;margin:5px" v-if="result.unlocked">
+                        <div class="flex-center" :style="`background-color:${this.$root.settings.color}`" style="padding:6px 10px;border-radius: 12px;margin:5px" v-if="result.unlocked">
 
                             <span class="material-icons-round text" style="font-size:24px">mail</span>
                             <span style="margin-left:10px" class="f-medium text">{{ result.dep.email }}</span>
                         </div>
-                        <div class="flex-center bg-green" style="padding:6px 10px;border-radius: 12px;margin:5px" v-if="result.unlocked">
+                        <div class="flex-center" :style="`background-color:${this.$root.settings.color}`" style="padding:6px 10px;border-radius: 12px;margin:5px" v-if="result.unlocked">
 
                             <span class="material-icons-round text" style="font-size:24px">cake</span>
                             <span style="margin-left:10px" class="f-medium text">{{ result.person.birthdate }}</span>

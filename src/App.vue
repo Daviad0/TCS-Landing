@@ -12,10 +12,10 @@
 
   <div v-show="showAccessPanel" class="flex-center" style="position:absolute;top:0;left:0;width:100%;height:100%;background-color: rgba(0,0,0,0.5);z-index:90">
     <div class="bg-white shadow fade-in" style="padding:20px;border-radius: 20px;width:50%">
-      <span class="f-large color-green f-bold">Unlock Code</span>
-      <span class="f-small color-green" style="margin:5px">You are trying to access sensitive details of a student. Please enter in the coach access code to continue accessing this student data...</span>
+      <span class="f-large f-bold" :style="`color:${this.$root.settings.color}`">Unlock Code</span>
+      <span class="f-small" :style="`color:${this.$root.settings.color}`" style="margin:5px">You are trying to access sensitive details of a student. Please enter in the coach access code to continue accessing this student data...</span>
       <div class="flex-center" style="margin-top:20px">
-        <input ref="pw" class="border-green f-medium color-green" type="password" style="border-radius: 16px;padding:6px 10px"/>
+        <input ref="pw" class="border-green f-medium" :style="`;border-color:${this.$root.settings.color};color:${this.$root.settings.color}`" type="password" style="border-radius: 16px;padding:6px 10px"/>
       </div>
 
       <div class="flex-center">
