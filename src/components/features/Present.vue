@@ -1,7 +1,7 @@
 <template>
     <div style="width:100%" class="flex-center">
       <div style="width:90%;max-height:80vh;overflow-y:scroll" class="hidescroll">
-        <div class="bg-dim shadow" style="padding:20px;border-radius: 16px;">
+        <div class="bg-dim shadow" style="padding:30px 20px;border-radius: 16px;margin:10px;margin-top:20px">
         <div class="flex-center">
           <span class="material-icons-round text" style="font-size:30px;margin:5px 10px">
             check_circle
