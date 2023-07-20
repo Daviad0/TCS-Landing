@@ -106,6 +106,7 @@
   import Search from '../components/features/Search.vue';
   import Settings from '../components/features/Settings.vue';
   import Coach from '../components/features/Coach.vue';
+  import ComputerManage from '../components/features/ComputerManage.vue';
 
   var mainFeatures = [
     {
@@ -143,8 +144,13 @@
       icon: "",
       use: false,
       component: Coach
+    },
+    {
+      name: "computers",
+      icon: "desktop_windows",
+      use: true,
+      component: ComputerManage
     }
-
   ]
 
 
@@ -323,6 +329,15 @@
 
 
             break;
+          case "computers":
+            if(evt.key == '0') {
+              this.switchScreen('coaches');
+            }
+
+            
+
+
+            break;
         }
       })
 
@@ -417,7 +432,7 @@
         }, duration)
       },
       buttonLetter(fin){
-        var useLetters = '01232456789';
+        var useLetters = '0123456789';
         if(!fin.use) return '';
         var indexOfFeature = this.mainFeatures.filter(mF => mF.use && mF.name != this.screen).indexOf(fin);
 
