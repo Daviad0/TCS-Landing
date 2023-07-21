@@ -187,7 +187,7 @@
                 });
                 ipString = ipString.substring(0, ipString.length - 1);
                 
-                this.axios.get(`http://10.1.10.246:3000/shutdown?ips=${ipString}&restart=${this.selectedAction == 'restart'}`).then((res) => {
+                this.axios.get(`http://10.1.10.246:3000/shutdown?ips=${ipString}&restart=${this.selectedAction == 'restart'}&pw=0ffbyabyte!`).then((res) => {
                     this.$parent.switchScreen('coaches');
                 });
             }
