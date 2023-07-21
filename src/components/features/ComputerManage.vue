@@ -43,12 +43,44 @@
     <div class="bg-white shadow" style="padding:20px;border-radius: 16px;margin:10px">
         <div class="flex-apart">
             <span class="f-medium f-bold" :style="`color:${this.$root.settings.color}`" style="text-align:left">Select Action</span>
+            <span class="f-medium" :style="`color:${this.$root.settings.color}`" style="text-align:right" v-if="selectedAction != ''"><i>Going to {{ selectedAction }}</i></span>
+        </div>
+        <div :style="phase == 'action' ? 'max-height:1000px' : 'max-height:0px'" style="overflow-y:hidden">
+            <div class="flex-center">
+                <div :style="selectedAction == 'shutdown' ? `background-color:${this.$root.settings.color}` : `background-color:${this.$root.settings.color}b0   `" style="padding:20px;border-radius: 16px;margin:10px">
+
+                    <Key :character="'A'" style="left:-30px;top:-12px"/>
+                    <div class="flex-center">
+                        <span class="material-icons-round text" style="font-size:100px;margin:0px 20px">power_settings_new</span>
+                    </div>
+                    
+                    <span class="f-medium f-bold text" style="margin:0px 10px">Shutdown</span>
+
+                </div>
+                <div :style="selectedAction == 'restart' ? `background-color:${this.$root.settings.color}` : `background-color:${this.$root.settings.color}b0   `" style="padding:20px;border-radius: 16px;margin:10px">
+
+                    <Key :character="'B'" style="left:-30px;top:-12px"/>
+
+                    <div class="flex-center">
+                        <span class="material-icons-round text" style="font-size:100px;margin:0px 20px">restart_alt</span>
+                    </div>
+                    
+                    <span class="f-medium f-bold text" style="margin:0px 10px">Restart</span>
+
+                </div>
+            </div>
             
         </div>
     </div>
     <div class="bg-white shadow" style="padding:20px;border-radius: 16px;margin:10px">
         <div class="flex-apart">
             <span class="f-medium f-bold" :style="`color:${this.$root.settings.color}`" style="text-align:left">Finalize</span>
+            
+        </div>
+        <div :style="phase == 'finalize' ? 'max-height:1000px' : 'max-height:0px'" style="overflow-y:hidden">
+            <div class="flex-center">
+                <span class="f-large f-bold" :style="`color:${this.$root.settings.color}`" style="margin:10px">Hit Enter to Send Request</span>
+            </div>
             
         </div>
     </div>
@@ -67,7 +99,9 @@
                 computers: [],
                 selectedComputers: [],
                 phase: "select",
-                rememberSeed: this.$parent.pageKeySeed
+                rememberSeed: this.$parent.pageKeySeed,
+                selectedAction: "",
+                sendingRequest: false
             }
         },
         mounted(){
@@ -80,13 +114,19 @@
 
                 if(this.phase == 'select'){
                     if(e.key == "a"){
+
+                        if(this.selectedComputers.length == this.computers.length){
+                            this.selectedComputers = [];
+                            return;
+                        }
+
                         this.selectedComputers = [];
                         this.computers.forEach(c => {
                             this.selectedComputers.push(c.ip);
                         })
                     }
 
-                    if(e.key == "Enter"){
+                    if(e.key == "Enter" && this.selectedComputers.length > 0){
                         this.phase = "action";
                     }
                     
@@ -99,6 +139,21 @@
                             }
                         }
                     })
+                }else if(this.phase == 'action'){
+                    if(e.key == 'a'){
+                        this.selectedAction = this.selectedAction == 'shutdown' ? '' : "shutdown";
+                    }else if(e.key == 'b'){
+                        this.selectedAction = this.selectedAction == 'restart' ? '' : "restart";
+                    }
+
+                    if(e.key == "Enter" && this.selectedAction != ""){
+                        this.phase = "finalize";
+                    }
+                }else if(this.phase == 'finalize'){
+                    if(e.key == "Enter"){
+                        this.sendRequest();
+                        this.phase = 'none';
+                    }
                 }
             });
 
@@ -121,6 +176,20 @@
                 var useLetters = "bcdefghijklmnopqrstuvwxyz/.,';[]-=";
                 var letter = useLetters.charAt(this.computers.indexOf(this.computers.find(c => c.ip == ip)));
                 return letter.toUpperCase();
+            },
+            sendRequest(){
+                if(this.sendingRequest) return;
+                this.sendingRequest = true;
+
+                var ipString = "";
+                this.selectedComputers.forEach(c => {
+                    ipString += c + ",";
+                });
+                ipString = ipString.substring(0, ipString.length - 1);
+                
+                this.axios.get(`http://10.1.10.246:3000/shutdown?ips=${ipString}&restart=${this.selectedAction == 'restart'}`).then((res) => {
+                    this.$parent.switchScreen('coaches');
+                });
             }
         }
     }
