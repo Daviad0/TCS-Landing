@@ -10,6 +10,10 @@
 
   </div>
 
+  <div style="position: absolute;top:0;left:0;width:100%;height:100%;z-index: -5" class="bg-dim" :style="showIdle ? 'opacity: 1' : 'opacity: 0'">
+
+  </div>
+
   <div v-show="showAccessPanel" class="flex-center" style="position:absolute;top:0;left:0;width:100%;height:100%;background-color: rgba(0,0,0,0.5);z-index:90">
     <div class="bg-white shadow fade-in" style="padding:20px;border-radius: 20px;width:50%">
       <span class="f-large f-bold" :style="`color:${this.$root.settings.color}`">Unlock Code</span>
@@ -50,7 +54,8 @@ export default {
       },
       appReviews: [],
       notes: [],
-      accountInformation: {}
+      accountInformation: {},
+      showIdle: false
     }
   },
   mounted(){

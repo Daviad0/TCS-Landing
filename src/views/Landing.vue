@@ -4,7 +4,7 @@
     Top clock and date portion
 
   -->
-  <div class="top-left bg-dim container flex-center shadow" style="border-radius: 0px 0px 24px 0px;width:40%;height:100px;min-width: 700px;">
+  <div class="top-left bg-dim container flex-center" :class="showIdle ? '' : 'shadow'" style="border-radius: 0px 0px 24px 0px;width:40%;height:100px;min-width: 700px;">
     <div style="margin:20px;width:45%" v-if="loaded.time">
       <span class="text f-large">{{ dateStrings[0] }}</span>
       <span class="text f-xlarge">{{ dateStrings[1] }}</span>
@@ -19,7 +19,7 @@
   <div class="top-right flex-center" >
     <img src="@/assets/circle-logo.png" style="margin:20px;border-radius: 100px;" height="80" class="shadow" />
   </div>
-  <div class="bottom-right flex-center bg-dim shadow" style="border-radius: 24px 0px 0px 0px;padding:10px;width:50%;height:100px;max-width:500px;min-width:200px">
+  <div class="bottom-right flex-center bg-dim" :class="showIdle ? '' : 'shadow'" style="border-radius: 24px 0px 0px 0px;padding:10px;width:50%;height:100px;max-width:500px;min-width:200px">
     <div ref="tr_content" class="fade-in">
       <span class="text f-large" v-if="tr.phase == 0">Welcome to <inline class="f-bold">Plymouth, MI</inline></span>
       <div v-if="tr.phase == 1">
@@ -45,13 +45,26 @@
     </div>
   </div>
 
-  <div class="bottom-left bg-dim flex-center shadow" style="margin:20px;border-radius:16px;width:40%;height:80px;padding:10px" :style="message.show ? 'bottom:0' : 'bottom: -200px'">
+  <div class="bottom-left bg-dim flex-center" :class="showIdle ? '' : 'shadow'" style="margin:20px;border-radius:16px;width:40%;height:80px;padding:10px" :style="(message.show ? 'bottom:0;' : 'bottom: -200px;') + (showIdle? 'left: 21%' : '')">
     <div>
       
       <span class="f-medium text">{{ message.text }}</span>
     </div>
     
   </div>
+
+  <div class="bottom-left bg-dim flex-center" :class="showIdle ? '' : 'shadow'" style="margin:20px;border-radius:16px;width:20%;height:100px;" :style="showIdle && this.$root.now() > saveLatestTime && !closed ? 'bottom:0' : 'bottom: -200px'">
+    <div>
+      
+      <span class="f-large text" style="margin:5px">Close the School?</span>
+      <div class="flex-center">
+        <KeyInline :character="'Enter'"/>
+      </div>
+      
+    </div>
+    
+  </div>
+
 
   
 
@@ -212,7 +225,8 @@
         pageKeySeed: "",
         multiStaffClasses: [],
         studentNoteDetail: {},
-        featureData: {}
+        featureData: {},
+        closed: false
       }
     },
     mounted() {
@@ -240,6 +254,14 @@
           return;
         }
 
+        if(evt.key == 'Enter' && this.showIdle && this.$root.now() > this.saveLatestTime){
+          this.closed = true;
+          this.axios.get(`http://10.1.10.246:3000/shutdown?restart=false`).then((res) => {
+              this.switchScreen('coaches');
+              this.closed = true;
+          });
+        }
+
         switch(this.screen){
           case "coaches":
             this.mainFeatures.filter(mF => mF.use && mF.name != this.screen).forEach(mF => {
@@ -255,7 +277,8 @@
             })
             break;
           case "absent":
-            if(evt.key == '0') {
+            // 0 or escape
+            if(evt.key == '0' || evt.key == 'Escape') {
               this.switchScreen('coaches');
             }
 
@@ -279,7 +302,7 @@
 
             break;
           case "present":
-            if(evt.key == '0') {
+            if(evt.key == '0' || evt.key == 'Escape') {
               this.switchScreen('coaches');
             }
 
@@ -303,7 +326,7 @@
 
             break;
           case "search":
-            if(evt.key == '0') {
+            if(evt.key == '0' || evt.key == 'Escape') {
               this.switchScreen('coaches');
             }
 
@@ -312,7 +335,7 @@
 
             break;
           case "settings":
-            if(evt.key == '0') {
+            if(evt.key == '0' || evt.key == 'Escape') {
               this.switchScreen('coaches');
             }
 
@@ -321,7 +344,7 @@
 
             break;
           case "coach":
-            if(evt.key == '0') {
+            if(evt.key == '0' || evt.key == 'Escape') {
               this.switchScreen('coaches');
             }
 
@@ -330,7 +353,7 @@
 
             break;
           case "computers":
-            if(evt.key == '0') {
+            if(evt.key == '0' || evt.key == 'Escape') {
               this.switchScreen('coaches');
             }
 
@@ -631,6 +654,8 @@
 
             
           }
+
+          this.$root.showIdle = this.showIdle;
 
           this.multiStaffClasses = setMultiClasses;
           setTimeout(() => {

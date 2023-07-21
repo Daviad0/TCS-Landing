@@ -15,6 +15,7 @@ import ClassNode from './components/ClassNode.vue'
 import BreakNode from './components/BreakNode.vue'
 import MultiNode from './components/MultiNode.vue'
 import Key from './components/Key.vue'
+import KeyInline from './components/KeyInline.vue'
 
 const app = createApp(App)
 
@@ -26,6 +27,7 @@ app.component('CoachNode', CoachNode)
 app.component('ClassNode', ClassNode)
 app.component('BreakNode', BreakNode)
 app.component('MultiNode', MultiNode)
+app.component('KeyInline', KeyInline)
 app.component('Key', Key)
 
 app.mount('#app')

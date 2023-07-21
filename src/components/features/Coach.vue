@@ -17,10 +17,10 @@
                         <div v-if="c.people.length < 3">
                             <div v-for="student in c.people" class="border-green" style="padding:10px;border-radius: 8px;margin:5px" :style="`border-color:${this.$root.settings.color}`">
                                 <div class="flex-apart" style="margin:0px 5px">
-                                    <span class="f-medium f-bold" :style="`color:${this.$root.settings.color}`" style="text-align: left;width:20%">{{ student.name }}</span>
+                                    <span class="f-medium f-bold" :style="`color:${this.$root.settings.color}`" style="text-align: left;width:25%">{{ student.name }}</span>
 
 
-                                    <div v-if="this.$parent.studentNoteDetail[student.id] != undefined && this.$parent.studentNoteDetail[student.id].language != 'None'" style="width:40%">
+                                    <div v-if="this.$parent.studentNoteDetail[student.id] != undefined && this.$parent.studentNoteDetail[student.id].language != 'None'" style="width:50%">
                                         <div class="flex-center">
                                             <div class="flex-center" style="margin:0px 10px">
                                                 <span class="material-icons-round"  :style="`color:${this.$root.settings.color}`" style="transform: rotate(90deg);margin-right:10px">vertical_align_top</span>
@@ -33,7 +33,7 @@
                                         </div>
                                     </div>
 
-                                    <div style="width:20%;justify-content: right;" class="flex-center" v-if="this.$parent.studentNoteDetail[student.id] != undefined && this.$parent.studentNoteDetail[student.id].language != 'None'">
+                                    <div style="width:25%;justify-content: right;" class="flex-center" v-if="this.$parent.studentNoteDetail[student.id] != undefined && this.$parent.studentNoteDetail[student.id].language != 'None'">
                                         <div class="bg-green" style="padding:6px 10px;border-radius: 8px;margin:5px" :style="`background-color:${this.$root.settings.color}`">
                                             <span class="f-small text">{{this.$parent.studentNoteDetail[student.id].language}}</span>
                                             

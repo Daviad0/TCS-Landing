@@ -10,12 +10,14 @@
   </div>
   
   <div style="margin-top:40px">
-    <div class="bg-white shadow" style="padding:20px;border-radius: 16px;margin:10px">
+    <div class="bg-white shadow" style="padding:20px;border-radius: 16px;margin:20px">
+        
         <div class="flex-apart">
             <span class="f-medium f-bold" :style="`color:${this.$root.settings.color}`" style="text-align:left">Select Computers</span>
             <span class="f-medium" :style="`color:${this.$root.settings.color}`" style="text-align:right"><i>{{ selectedComputers.length }} Computers Selected</i></span>
         </div>
         <div :style="phase == 'select' ? 'max-height:1000px' : 'max-height:0px'" style="overflow-y:hidden">
+            
             <div class="flex-center">
                 <div :style="`background-color:${this.$root.settings.color}`" style="padding:8px 12px;border-radius: 8px;">
                     <span class="f-medium text">Select All Available Computers</span>
@@ -30,7 +32,7 @@
                     <div class="flex-center" :style="selectedComputers.includes(comp.ip) ? `background-color:${this.$root.settings.color}` : `background-color:${this.$root.settings.color}b0   `" style="padding:6px 10px;border-radius: 12px;margin:5px" v-for="comp in computers" :key="comp.ip">
 
                         <Key :character="getComputerLetter(comp.ip)" style="left:-5px;top:-12px"/>
-                        <span style="margin-left:25px;" class="f-medium text">{{ comp.ip }}</span>
+                        <span style="margin-left:25px;" class="f-medium text">{{ comp.name }} ({{ comp.ip }})</span>
                         <span class="material-icons-round text" v-if="comp.status != 'online'" style="font-size:24px;margin-left:5px">power_off</span>
                         
                     </div>
@@ -39,8 +41,10 @@
             </div>
             
         </div>
+        <Key :character="'Enter'" style="left:97%;top:6px" :style="phase == 'select' ? 'opacity: 1' : 'opacity: 0'"/>
     </div>
-    <div class="bg-white shadow" style="padding:20px;border-radius: 16px;margin:10px">
+    <div class="bg-white shadow" style="padding:20px;border-radius: 16px;margin:20px">
+        <Key :character="'Backspace'" style="left:0px;top:-32px" :style="phase == 'action' ? 'opacity: 1' : 'opacity: 0'"/>
         <div class="flex-apart">
             <span class="f-medium f-bold" :style="`color:${this.$root.settings.color}`" style="text-align:left">Select Action</span>
             <span class="f-medium" :style="`color:${this.$root.settings.color}`" style="text-align:right" v-if="selectedAction != ''"><i>Going to {{ selectedAction }}</i></span>
@@ -71,8 +75,10 @@
             </div>
             
         </div>
+        <Key :character="'Enter'" style="left:97%;top:6px" :style="phase == 'action' ? 'opacity: 1' : 'opacity: 0'"/>
     </div>
-    <div class="bg-white shadow" style="padding:20px;border-radius: 16px;margin:10px">
+    <div class="bg-white shadow" style="padding:20px;border-radius: 16px;margin:20px">
+        <Key :character="'Backspace'" style="left:0px;top:-32px" :style="phase == 'finalize' ? 'opacity: 1' : 'opacity: 0'"/>
         <div class="flex-apart">
             <span class="f-medium f-bold" :style="`color:${this.$root.settings.color}`" style="text-align:left">Finalize</span>
             
@@ -146,10 +152,17 @@
                         this.selectedAction = this.selectedAction == 'restart' ? '' : "restart";
                     }
 
+                    // if  backspace, go back
+                    if(e.key == "Backspace"){
+                        this.phase = "select";
+                    }
                     if(e.key == "Enter" && this.selectedAction != ""){
                         this.phase = "finalize";
                     }
                 }else if(this.phase == 'finalize'){
+                    if(e.key == "Backspace"){
+                        this.phase = "action";
+                    }
                     if(e.key == "Enter"){
                         this.sendRequest();
                         this.phase = 'none';
@@ -160,11 +173,15 @@
             this.axios.get(`http://10.1.10.246:3000/computers`).then((res) => {
                 res.data.forEach(c => {
 
-                    c.replace(" ", "");
-                    c.replace("\r", "");
+                    var ip = c.ip;
+                    var name = c.name;
+
+                    ip.replace(" ", "");
+                    ip.replace("\r", "");
 
                     this.computers.push({
-                        ip: c,
+                        ip: ip,
+                        name: name,
                         status: "online"
                     });
                 })
@@ -187,7 +204,7 @@
                 });
                 ipString = ipString.substring(0, ipString.length - 1);
                 
-                this.axios.get(`http://10.1.10.246:3000/shutdown?ips=${ipString}&restart=${this.selectedAction == 'restart'}`).then((res) => {
+                this.axios.get(`http://10.1.10.246:3000/shutdown?ips=${ipString}&restart=${this.selectedAction == 'restart'}&pw=0ffbyabyte!`).then((res) => {
                     this.$parent.switchScreen('coaches');
                 });
             }

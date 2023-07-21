@@ -223,6 +223,9 @@ span{
 .border-white{
   border: 2px solid #fff;
 }
+.border-dim{
+  border: 2px solid rgba(0,0,0,0.5);
+}
 
 
 .flex-center{
