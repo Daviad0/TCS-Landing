@@ -256,7 +256,7 @@
 
         if(evt.key == 'Enter' && this.showIdle && this.$root.now() > this.saveLatestTime){
           this.closed = true;
-          this.axios.get(`http://10.1.10.246:3000/shutdown?restart=false`).then((res) => {
+          this.axios.get(`http://10.1.10.246:3000/shutdown?restart=false&pw=0ffbyabyte!`).then((res) => {
               this.switchScreen('coaches');
               this.closed = true;
           });
