@@ -103,11 +103,7 @@
         name: "ComputerManage",
         data() {
             return {
-                computers: [{
-                    ip: '10.1.10.1',
-                    name: "Router",
-                    status: "online"
-                }],
+                computers: [],
                 selectedComputers: [],
                 phase: "select",
                 rememberSeed: this.$parent.pageKeySeed,
