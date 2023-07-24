@@ -254,7 +254,7 @@
           return;
         }
 
-        if(evt.key == 'Enter' && this.showIdle && this.$root.now() > this.saveLatestTime){
+        if(evt.key == 'Enter' && this.showIdle && this.$root.now() > this.saveLatestTime && this.screen != 'computers'){
           this.closed = true;
           this.axios.get(`http://10.1.10.246:3000/shutdown?restart=false&pw=0ffbyabyte!`).then((res) => {
               this.switchScreen('coaches');
@@ -647,9 +647,11 @@
               this.switchScreen("coaches");
               setTimeout(() => {
                 this.showIdle = false;
+                this.closed = false;
               }, 900);
             }else{
               this.showIdle = false;
+              this.closed = false;
             }
 
             

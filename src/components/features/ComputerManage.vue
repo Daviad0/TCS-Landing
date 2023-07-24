@@ -84,6 +84,7 @@
             
         </div>
         <div :style="phase == 'finalize' ? 'max-height:1000px' : 'max-height:0px'" style="overflow-y:hidden">
+            <span class="f-medium" :style="`color:${this.$root.settings.color}`">You will be {{ selectedAction == 'restart' ? 'restarting' : 'shutting down' }} {{ selectedComputers.length }} computer{{ selectedComputers.length > 1 ? 's' : '' }}</span>
             <div class="flex-center">
                 <span class="f-large f-bold" :style="`color:${this.$root.settings.color}`" style="margin:10px">Hit Enter to Send Request</span>
             </div>
@@ -102,7 +103,11 @@
         name: "ComputerManage",
         data() {
             return {
-                computers: [],
+                computers: [{
+                    ip: '10.1.10.1',
+                    name: "Router",
+                    status: "online"
+                }],
                 selectedComputers: [],
                 phase: "select",
                 rememberSeed: this.$parent.pageKeySeed,
@@ -164,7 +169,7 @@
                         this.phase = "action";
                     }
                     if(e.key == "Enter"){
-                        this.sendRequest();
+                        this.doesNeedAuth();
                         this.phase = 'none';
                     }
                 }
@@ -193,6 +198,14 @@
                 var useLetters = "bcdefghijklmnopqrstuvwxyz/.,';[]-=";
                 var letter = useLetters.charAt(this.computers.indexOf(this.computers.find(c => c.ip == ip)));
                 return letter.toUpperCase();
+            },
+            doesNeedAuth(){
+                if(this.$parent.showIdle){
+                    this.sendRequest();
+                }
+                else{
+                    this.$root.accessCodeShow(this.sendRequest);
+                }
             },
             sendRequest(){
                 if(this.sendingRequest) return;

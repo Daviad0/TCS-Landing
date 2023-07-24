@@ -60,7 +60,7 @@
                                     <span style="justify-content: right;opacity:0.7;margin-top:10px" :style="`color:${this.$root.settings.color}`" class="f-small flex-center">
                                         Written on 
                                         <div class="bg-green" style="padding:6px 10px;border-radius: 8px;margin-left:7px" :style="`background-color:${this.$root.settings.color}90`">
-                                            <span class="f-bold f-small text">{{ new Date(this.$parent.studentNoteDetail[student.id].date).toLocaleString() }}</span>
+                                            <span class="f-bold f-small text">{{ new Date(this.$parent.studentNoteDetail[student.id].date).toLocaleString().split(", ")[0] }}</span>
                                             
                                         </div>
                                     </span>
