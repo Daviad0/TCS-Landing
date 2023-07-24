@@ -176,6 +176,7 @@
 
                     var ip = c.ip;
                     var name = c.name;
+                    var status = c.status;
 
                     ip.replace(" ", "");
                     ip.replace("\r", "");
@@ -183,7 +184,7 @@
                     this.computers.push({
                         ip: ip,
                         name: name,
-                        status: "online"
+                        status: status
                     });
                 })
             });
