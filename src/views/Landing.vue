@@ -120,6 +120,7 @@
   import Settings from '../components/features/Settings.vue';
   import Coach from '../components/features/Coach.vue';
   import ComputerManage from '../components/features/ComputerManage.vue';
+  import LEDs from '../components/features/LEDs.vue';
 
   var mainFeatures = [
     {
@@ -163,6 +164,12 @@
       icon: "desktop_windows",
       use: true,
       component: ComputerManage
+    },
+    {
+      name: "leds",
+      icon: "lightbulb",
+      use: true,
+      component: LEDs
     }
   ]
 
@@ -353,6 +360,15 @@
 
             break;
           case "computers":
+            if(evt.key == '0' || evt.key == 'Escape') {
+              this.switchScreen('coaches');
+            }
+
+            
+
+
+            break;
+          case "leds":
             if(evt.key == '0' || evt.key == 'Escape') {
               this.switchScreen('coaches');
             }
