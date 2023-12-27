@@ -11,15 +11,21 @@
 
   <div class="bg-dim shadow" style="padding:30px 20px;border-radius: 16px;margin:10px;margin-top:20px">
     <div class="flex-center">
-      <span class="text f-xlarge f-bold" style="margin:5px;margin-top:10px">Current Preset: {{ currentPreset }}</span>
+        <span class="material-icons-round text" style="font-size:30px;margin:5px 10px">arrow_circle_up</span>
+      <span class="text f-xlarge f-bold" style="margin:5px;margin-top:10px">Current Preset: {{ currentPreset.name }}</span>
     </div>
   </div>
   
   <div class="flex-center" style="flex-wrap:wrap;margin-top:40px">
-    <div v-for="preset in this.presets" :key="preset">
+    <div v-for="preset in this.presets" :key="preset.file">
         <div class="container bg-white shadow" style="border-radius:16px;margin:10px;padding:12px 24px">
-            <span class="f-large" :style="`color:${this.$root.settings.color}`">{{ preset }}</span>
-            <Key :character="this.getLetter(preset).toUpperCase()" style="left:-20px;top:-5px"/>
+            <span class="f-large" :style="`color:${this.$root.settings.color}`">{{ preset.name }}</span>
+            <div class="flex-center">
+                <div v-for="color in preset.colors">
+                    <div :style="`background-color:${color}`" style="width:20px;height:20px;border-radius:50%;margin:5px"></div>
+                </div>
+            </div>
+            <Key :character="this.getLetter(preset.file).toUpperCase()" style="left:-20px;top:-5px"/>
         </div>
     </div>
     </div>
@@ -61,8 +67,9 @@
         },
         methods: {
             getLetter(preset){
-                return letters.charAt(this.presets.indexOf(preset));
+                return letters.charAt(this.presets.indexOf(this.presets.find(p => p.file == preset)));
             },
+            
             getComputerLetter(ip){
                 var useLetters = "bcdefghijklmnopqrstuvwxyz/.,';[]-=";
                 var letter = useLetters.charAt(this.computers.indexOf(this.computers.find(c => c.ip == ip)));
