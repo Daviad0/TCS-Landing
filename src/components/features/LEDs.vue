@@ -54,8 +54,8 @@
             });
 
             this.axios.get(`http://10.1.10.246:3000/presets`).then((res) => {
-                presets = res.data.presets;
-                currentPreset = res.data.current;
+                this.presets = res.data.presets;
+                this.currentPreset = res.data.current;
             });
             
         },
