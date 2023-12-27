@@ -56,6 +56,15 @@
 
                 if(this.$parent.pageKeySeed != this.rememberSeed) return;
 
+                // check if the key is a letter within the number of presets we have
+
+                if(letters.includes(e.key.toLowerCase())){
+                    var index = letters.indexOf(e.key.toLowerCase());
+
+                    if(index >= this.presets.length) return;
+                    var preset = this.presets[letters.indexOf(e.key.toLowerCase())];
+                    this.sendRequest(preset.file);
+                }
                 
             });
 
@@ -83,18 +92,14 @@
                     this.$root.accessCodeShow(this.sendRequest);
                 }
             },
-            sendRequest(){
+            sendRequest(file){
                 if(this.sendingRequest) return;
                 this.sendingRequest = true;
 
-                var ipString = "";
-                this.selectedComputers.forEach(c => {
-                    ipString += c + ",";
-                });
-                ipString = ipString.substring(0, ipString.length - 1);
-                
-                this.axios.get(`http://10.1.10.246:3000/shutdown?ips=${ipString}&restart=${this.selectedAction == 'restart'}&pw=0ffbyabyte!`).then((res) => {
+                            
+                this.axios.get(`http://10.1.10.246:3000/setpreset?file=${file}`).then((res) => {
                     this.$parent.switchScreen('coaches');
+                    this.sendingRequest = false;
                 });
             }
         }

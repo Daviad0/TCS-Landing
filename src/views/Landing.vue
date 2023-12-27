@@ -4,7 +4,7 @@
     Top clock and date portion
 
   -->
-  <div class="top-left bg-dim container flex-center" :class="showIdle ? '' : 'shadow'" style="border-radius: 0px 0px 24px 0px;width:40%;height:100px;min-width: 700px;">
+  <div class="top-left bg-dim container flex-center" :class="showIdle ? '' : 'shadow'" style="border-radius: 0px 0px 24px 0px;width:50%;height:100px;min-width: 800px;">
     <div style="margin:20px;width:45%" v-if="loaded.time">
       <span class="text f-large">{{ dateStrings[0] }}</span>
       <span class="text f-xlarge">{{ dateStrings[1] }}</span>
