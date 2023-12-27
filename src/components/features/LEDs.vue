@@ -22,7 +22,7 @@
             <span class="f-large" :style="`color:${this.$root.settings.color}`">{{ preset.name }}</span>
             <div class="flex-center">
                 <div v-for="color in preset.colors">
-                    <div :style="`background-color:${color}`" style="width:20px;height:20px;border-radius:50%;margin:5px"></div>
+                    <div :style="`background-color:${color}`" class="shadow-less" style="width:20px;height:20px;border-radius:50%;margin:5px"></div>
                 </div>
             </div>
             <Key :character="this.getLetter(preset.file).toUpperCase()" style="left:-20px;top:-5px"/>
