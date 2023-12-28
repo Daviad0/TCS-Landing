@@ -29,6 +29,15 @@
         </div>
     </div>
     </div>
+
+    <div class="flex-center" style="flex-wrap:wrap;margin-top:40px">
+        <div class="container bg-white shadow flex-center" style="border-radius:16px;margin:10px;padding:12px 24px">
+            <span class="f-xlarge" :style="`color:${this.$root.settings.color}`" style="margin-right:10px">Set Custom Color</span>
+            <input type="color" ref="colorSelector" v-on:change="setCustomColor()" style="width:40px;height:40px;border-radius:8px;margin:5px;background-color: white;border:2px solid black">
+            
+            
+        </div>
+    </div>
   
 </div>
 
@@ -63,7 +72,9 @@
 
                     if(index >= this.presets.length) return;
                     var preset = this.presets[letters.indexOf(e.key.toLowerCase())];
-                    this.sendRequest(preset.file);
+
+                    this.sendRequest(preset.file, preset.name);
+                    this.currentPreset = preset.name;
                 }
                 
             });
@@ -92,12 +103,24 @@
                     this.$root.accessCodeShow(this.sendRequest);
                 }
             },
-            sendRequest(file){
+            setCustomColor(){
+                if(this.sendingRequest) return;
+                this.sendingRequest = true;
+                var color = this.$refs.colorSelector.value.replace("#", "").toUpperCase();
+                console.log(this.$refs.colorSelector.value)
+                
+                this.currentPreset = "Custom Color: #" + color;
+                this.axios.get(`http://10.1.10.246:3000/setcolor?color=${color}`).then((res) => {
+                    this.$parent.switchScreen('coaches');
+                    this.sendingRequest = false;
+                });
+            },
+            sendRequest(file, name){
                 if(this.sendingRequest) return;
                 this.sendingRequest = true;
 
                             
-                this.axios.get(`http://10.1.10.246:3000/setpreset?file=${file}`).then((res) => {
+                this.axios.get(`http://10.1.10.246:3000/setpreset?file=${file}&name=${name}`).then((res) => {
                     this.$parent.switchScreen('coaches');
                     this.sendingRequest = false;
                 });
