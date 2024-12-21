@@ -403,7 +403,7 @@
         this.students.forEach(async s => {
           if(replaceStuNoteDetail[s.id] != undefined) return;
 
-          var apiRes = await this.axios.get(`https://tcs-landing-api.daveeddigs.repl.co/student?stuId=${s.id}&staffId=${this.$root.accountInformation.id}&location={${this.$root.location.split("-")[0]}&name=${this.$root.accountInformation.first_name}%${this.$root.accountInformation.last_name}&token=${this.$cookies.get('token')}`);
+          var apiRes = await this.axios.get(`http://localhost:3030/student?stuId=${s.id}&staffId=${this.$root.accountInformation.id}&location={${this.$root.location.split("-")[0]}&name=${this.$root.accountInformation.first_name}%${this.$root.accountInformation.last_name}&token=${this.$cookies.get('token')}`);
           replaceStuNoteDetail[s.id] = apiRes.data;
         })
 
@@ -680,7 +680,7 @@
             this.students.forEach(async s => {
               if(this.studentNoteDetail[s.id] != undefined) return;
 
-              var apiRes = await this.axios.get(`https://tcs-landing-api.daveeddigs.repl.co/student?stuId=${s.id}&staffId=${this.$root.accountInformation.id}&location={${this.$root.location.split("-")[0]}&name=${this.$root.accountInformation.first_name}%${this.$root.accountInformation.last_name}&token=${this.$cookies.get('token')}`);
+              var apiRes = await this.axios.get(`http://localhost:3030/student?stuId=${s.id}&staffId=${this.$root.accountInformation.id}&location={${this.$root.location.split("-")[0]}&name=${this.$root.accountInformation.first_name}%${this.$root.accountInformation.last_name}&token=${this.$cookies.get('token')}`);
               this.studentNoteDetail[s.id] = apiRes.data;
             })
           }, 3000);
