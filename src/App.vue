@@ -70,7 +70,7 @@ export default {
       this.accountInformation = res.data.accounts[0];
     });
 
-    this.axios.get(`https://tcs-landing-api.daveeddigs.repl.co/apps`).then((res) => {
+    this.axios.get(`http://localhost:3030/apps`).then((res) => {
         this.appReviews = res.data.apps;
     });
 
